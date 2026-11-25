@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="The languages the family’s ancestors spoke, with links to sources.">
+<title>The Family's Mother Tongues</title>
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img,svg{max-width:100%}[hidden]{display:none!important}</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f3f4f2; --surface:#ffffff; --ink:#1c211f; --muted:#5b645f; --rule:#d5dad6;
+  --dad:#2f5e8f; --dad-soft:#e3ecf6; --mom:#8a3f63; --mom-soft:#f4e5ec;
+  --f-iro:#9a4a1c; --f-wg:#2f6f62; --f-ng:#4b5a85; --f-cel:#3f7a2e; --f-rom:#7a4a8f;
+  --display:"Spectral",Georgia,serif; --body:"Source Sans 3",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151917; --surface:#1c2220; --ink:#e3e8e5; --muted:#9aa49f; --rule:#2c3431;
+  --dad:#8fb7e3; --dad-soft:#1f2c3b; --mom:#e09ab9; --mom-soft:#3a2330;
+  --f-iro:#e39a6c; --f-wg:#76c4b2; --f-ng:#a6b3e2; --f-cel:#9bd283; --f-rom:#cba1de; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151917; --surface:#1c2220; --ink:#e3e8e5; --muted:#9aa49f; --rule:#2c3431;
+  --dad:#8fb7e3; --dad-soft:#1f2c3b; --mom:#e09ab9; --mom-soft:#3a2330;
+  --f-iro:#e39a6c; --f-wg:#76c4b2; --f-ng:#a6b3e2; --f-cel:#9bd283; --f-rom:#cba1de; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:52rem;margin:0 auto;padding-block:2.75rem 4rem;display:flex;flex-direction:column;gap:2.6rem}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(2rem,4.6vw,2.9rem);font-weight:700}
+h2{font-size:1.6rem;font-weight:600}
+h3{font-size:1.25rem;font-weight:600}
+p{margin:0;max-width:68ch}
+a{color:var(--dad)}
+.eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.12rem;color:var(--muted)}
+.tally{display:flex;flex-wrap:wrap;gap:.5rem}
+.tally span{font-family:var(--mono);font-size:.78rem;padding:.25rem .6rem;border-radius:999px;border:1px solid var(--rule);background:var(--surface)}
+.family{display:flex;flex-direction:column;gap:1.4rem}
+.family>header{display:flex;flex-direction:column;gap:.3rem;border-top:3px solid var(--fc);padding-top:.7rem}
+.family>header .fam{font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--fc)}
+.lang{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1rem 1.15rem;display:flex;flex-direction:column;gap:.7rem}
+.lang .native{font-family:var(--display);font-style:italic;color:var(--fc);font-size:1rem}
+.lang .about{font-size:.95rem;color:var(--ink)}
+.people{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.people li{display:grid;grid-template-columns:3.2rem minmax(0,1fr);gap:.2rem .8rem;padding:.55rem 0;border-top:1px solid var(--rule)}
+.side{font-family:var(--mono);font-size:.7rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;padding:.12rem .35rem;border-radius:3px;height:fit-content;text-align:center;margin-top:.2rem}
+.side.dad{background:var(--dad-soft);color:var(--dad)}
+.side.mom{background:var(--mom-soft);color:var(--mom)}
+.who{font-weight:600}
+.where{font-family:var(--mono);font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.rel{font-size:.86rem;color:var(--muted)}
+.note{font-size:.92rem}
+.conf{font-family:var(--mono);font-size:.66rem;letter-spacing:.05em;text-transform:uppercase;margin-left:.35rem;padding:.05rem .3rem;border-radius:3px;border:1px solid var(--rule);color:var(--muted);vertical-align:middle;white-space:nowrap}
+.conf.rec{border-color:var(--f-wg);color:var(--f-wg)}
+.cites{font-family:var(--mono);font-size:.7rem;margin-left:.3rem}.cites a{margin-right:.45rem;text-underline-offset:2px}
+.word{font-size:.88rem;color:var(--muted);border-left:3px solid var(--fc);padding-left:.7rem}
+.word b{color:var(--ink);font-family:var(--display);font-style:italic;font-weight:600}
+.box{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1rem 1.15rem;display:flex;flex-direction:column;gap:.6rem}
+ul.plain{margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:.4rem}
+.src{font-size:.84rem;color:var(--muted)}
+.src ul{padding-left:1.1rem;margin:.35rem 0 0}
+@media (max-width:480px){.people li{grid-template-columns:1fr}.side{width:fit-content}}
+nav.fam{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:.88rem;padding-block:12px 0;max-width:52rem;margin:0 auto}
+nav.fam a{color:inherit;opacity:.75;text-underline-offset:3px}nav.fam a[aria-current]{opacity:1;font-weight:600;text-decoration:none}
+</style>
+</head>
+<body>
+<nav class="fam" aria-label="Family history pages"><a href="index.html">Start</a><a href="henderson.html">Henderson map</a><a href="snouse-ashmead.html">Snouse &amp; Ashmead map</a><a href="languages.html" aria-current="page">Languages</a><a href="lore.html">Lore vs. records</a></nav>
+
+
+<main>
+<header style="display:flex;flex-direction:column;gap:.8rem">
+  <span class="eyebrow">Two branches of one family · from the 1600s to the 1800s</span>
+  <h1>The family's mother tongues</h1>
+  <p class="lede">Before everyone ended up speaking American English, the family’s ancestors arrived speaking at least a dozen languages and dialects: Mohawk, Dutch, Norwegian, Danish, Scots, Gaelic, several kinds of English, and half a dozen distinct German dialects. This page groups them by language and says who spoke what, and where they came from.</p>
+  <div class="tally" aria-label="Languages">
+    <span>Mohawk</span><span>Dutch</span><span>Norwegian</span><span>Danish</span><span>Swabian</span><span>Alsatian</span><span>Palatine German</span><span>Bernese German</span><span>Upper Saxon</span><span>Pennsylvania Dutch</span><span>Scots</span><span>Scottish Gaelic</span><span>Irish &amp; Ulster speech</span><span>Regional English</span><span>French?</span>
+  </div>
+  <p class="src">How to read this: a person's language is inferred from when and where they were born, using what's known about speech in that place and time. <span class="conf rec">record</span> marks a birthplace confirmed by a census or similar record; <span class="conf">tree</span> marks one that comes from a family tree. <span class="side dad">HEN</span> marks the Henderson branches and <span class="side mom">SNO</span> the Snouse and Ashmead branches. Relationships are counted from Austin’s generation, so take off one “great” for Austin’s parents and add one for the next generation down. The small links open the record itself, or a family-tree page where there is no record. FamilySearch records need a free sign-in.</p>
+</header>
+
+<!-- IROQUOIAN -->
+<section class="family" style="--fc:var(--f-iro)">
+  <header><span class="fam">Iroquoian</span><h2>Mohawk</h2></header>
+  <div class="lang">
+    <span class="native">Kanien'kéha, “the language of the people of the flint”</span>
+    <p class="about">Mohawk is a Northern Iroquoian language, related to Oneida, Onondaga, Cayuga and Seneca. In the 1600s the Mohawk lived in palisaded towns along the Mohawk River west of present-day Schenectady, and traded furs with the Dutch at Fort Orange (Albany). Mohawk is still spoken today and is being actively revived.</p>
+    <ul class="people">
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">A Mohawk woman</span> <span class="conf rec">histories</span> <span class="cites"><a href="https://schenectadyhistory.org/resources/patent/vanslyck_c.html" target="_blank" rel="noopener">record</a></span><div class="where">born about the 1620s · Mohawk country, New York</div><div class="rel">10th-great-grandmother</div><div class="note">Her name isn't recorded (tradition says Ots-Toch). She would have spoken only Mohawk, and is the one ancestor on either side whose first language was Indigenous to North America.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Jacques Cornelissen Van Slyck</span> <span class="conf rec">histories</span> <span class="cites"><a href="https://schenectadyhistory.org/resources/patent/vanslyck_c.html" target="_blank" rel="noopener">record</a></span><div class="where">born about 1640 · Mohawk country; later Schenectady</div><div class="rel">9th-great-grandfather</div><div class="note">Bilingual in Mohawk and Dutch, and worked as an official interpreter between the Mohawk and the colony. Later sources give him a Mohawk name as well.</div></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- WEST GERMANIC: DUTCH -->
+<section class="family" style="--fc:var(--f-wg)">
+  <header><span class="fam">West Germanic</span><h2>Dutch, and New York “Low Dutch”</h2></header>
+  <div class="lang">
+    <span class="native">Nederlands; in colonial New York, simply “Duits” or Low Dutch</span>
+    <p class="about">The first settlers of Albany and Schenectady spoke the Dutch of Holland. Their American-born grandchildren kept a local dialect, New York Dutch, alive for over a century after the English took over in 1664. The Schoharie church still wrote baptisms in Dutch in the 1790s. Susanna Becker was christened in 1794 as “Susanna Bekker”, daughter of “Ludewig”.</p>
+    <p class="word">New York Dutch left American English words like <b>cookie</b> (koekje), <b>boss</b> (baas), <b>stoop</b> (stoep) and <b>Santa Claus</b> (Sinterklaas).</p>
+    <ul class="people">
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Hendrick Meese Vrooman</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/LXQF-RPT" target="_blank" rel="noopener">tree</a></span><div class="where">born 1618 · Leiden, Holland</div><div class="rel">9th-great-grandfather</div><div class="note">Leiden Dutch (Hollandic). The city was also home to the English Pilgrims before they sailed on the Mayflower in 1620. He was killed in the Schenectady massacre of 1690.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Adam Vrooman</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/LZZH-4Z5" target="_blank" rel="noopener">tree</a></span><div class="where">born 1649 · Leiden, Holland</div><div class="rel">8th-great-grandfather</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Jan Jurians Becker</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/PJSM-LRG" target="_blank" rel="noopener">tree</a></span><div class="where">born about 1630 · Amsterdam</div><div class="rel">8th-great-grandfather</div><div class="note">Amsterdam Dutch. Settled at Albany.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">The American-born Dutch line</span> <span class="conf rec">church records</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:F63H-J2K" target="_blank" rel="noopener">1787 marriage</a> <a href="https://www.familysearch.org/ark:/61903/1:1:V2CQ-VMR" target="_blank" rel="noopener">1794 baptism</a></span><div class="where">Susanna Van Slyck (b. 1662), Susanna Bratt (1704), Bartholomeus Vrooman (c. 1700), Hendrick Hagedoorn (1720), Santje Vrooman (c. 1728), Eva Hagedoorn (1767) · Schenectady, Albany, Schoharie</div><div class="rel">8th- to 5th-great-grandparents</div><div class="note">Probably all spoke New York Dutch at home, with English increasingly spoken around them after 1700. Eva Hagedoorn married Ludwig Becker in 1787, and their daughter Susanna (born 1794) probably grew up hearing Dutch at church and English everywhere else. By the time her daughter Lorinda was born in 1838, the family spoke English.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Rebeckah van den Bogart</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/L41B-LK5" target="_blank" rel="noopener">tree</a></span><div class="where">born 1697 · Albany, New York</div><div class="rel">8th-great-grandmother (Smith line)</div><div class="note">A second, separate New York Dutch thread, on the Smith side.</div></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- NORTH GERMANIC -->
+<section class="family" style="--fc:var(--f-ng)">
+  <header><span class="fam">North Germanic</span><h2>Norwegian and Danish</h2></header>
+  <div class="lang">
+    <h3>Norwegian</h3>
+    <p class="about">In the 1600s Norway was ruled from Copenhagen, and its written language was Danish. People spoke Norwegian dialects, though. Fredrikstad, at the mouth of the Glomma River in Østfold, spoke an East Norwegian dialect. A surprising number of New Netherland's settlers were Norwegian sailors and timbermen.</p>
+    <ul class="people">
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Arent Andriessen Bradt</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/LBBK-WRJ" target="_blank" rel="noopener">tree</a></span><div class="where">born about 1615 · Fredrikstad, Østfold, Norway</div><div class="rel">9th-great-grandfather</div><div class="note">Norwegian (Østfold dialect), and he would have learned Dutch at Rensselaerswyck. Norwegians in the colony were often nicknamed “de Noorman”.</div></div></li>
+    </ul>
+  </div>
+  <div class="lang">
+    <h3>Danish</h3>
+    <p class="about">Danish dialects differ sharply between Jutland and the islands, and Fred's home region isn't known yet. In the 1880s, emigrants left both for American cities and for the farm country of the upper Midwest.</p>
+    <p class="word">Danish is known for its <b>stød</b>, a catch in the voice that can be the only difference between two words.</p>
+    <ul class="people">
+      <li><span class="side dad" title="Henderson branches">HEN</span><div><span class="who">Fred Peterson</span> <span class="conf rec">1900 census</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:MSF9-47F" target="_blank" rel="noopener">record</a></span><div class="where">born August 1861 · Denmark → New York, 1883</div><div class="rel">2nd-great-grandfather</div><div class="note">The most recent non-English-speaking immigrant on the Henderson side. The name was very likely Petersen back home. His son Frank, born in New York in 1887, grew up speaking English.</div></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- WEST GERMANIC: GERMAN DIALECTS -->
+<section class="family" style="--fc:var(--f-wg)">
+  <header><span class="fam">West Germanic</span><h2>German, in six dialects</h2></header>
+  <p>“German” in the 1700s and 1800s wasn't one spoken language. A Swabian and a Saxon could struggle to understand each other's speech, and Standard German was mostly for writing and church. The German-speaking ancestors are all on the Snouse and Ashmead side, and they came from at least six distinct dialect areas.</p>
+
+  <div class="lang">
+    <h3>Swabian (Schwäbisch)</h3>
+    <p class="about">An Alemannic dialect of Württemberg. Emmingen sits above the Nagold valley at the edge of the northern Black Forest, in the heart of Swabian country.</p>
+    <p class="word">Swabian is famous for its diminutive <b>-le</b>: <b>Häusle</b> for “little house”, and <b>Spätzle</b>, the noodles.</p>
+    <ul class="people">
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Andreas Huber &amp; Anna Beutler</span> <span class="conf">tree</span><div class="where">born 1731 &amp; 1743 · Emmingen, near Nagold, Württemberg</div><div class="rel">6th-great-grandparents</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Gottlieb F. Huber &amp; Christina Schaeching</span> <span class="conf">tree</span><div class="where">born 1779 &amp; 1785 · Emmingen</div><div class="rel">5th-great-grandparents</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">George (Johann G.) Huber &amp; Anna Maria Strentz</span> <span class="conf rec">1860 census</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:MCGX-ZW9" target="_blank" rel="noopener">George record</a></span><div class="where">born 1808 · Württemberg → Greenville, Ohio, about 1845</div><div class="rel">4th-great-grandparents</div><div class="note">Swabian at home in Ohio, among the German churches of Darke County. His second wife, Caroline, was from Prussia and would have spoken a different German.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Christina K. Huber</span> <span class="conf rec">1860 census</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:MCGX-ZW9" target="_blank" rel="noopener">record</a></span><div class="where">born 1843 · near Nagold, Württemberg → Ohio as a toddler</div><div class="rel">3rd-great-grandmother</div><div class="note">Probably bilingual: Swabian at home, English outside. She married John Snouse, whose family spoke a quite different German.</div></div></li>
+    </ul>
+  </div>
+
+  <div class="lang">
+    <h3>Upper Saxon (Obersächsisch)</h3>
+    <p class="about">The speech of the Kingdom of Saxony (Dresden, Leipzig, Meissen). Written Standard German grew largely out of the Meissen chancery language that Luther used, but the spoken dialect is quite different and is often teased elsewhere in Germany. If the Snouses came from the Prussian Province of Saxony rather than the Kingdom, their speech could have been Thuringian or East Low German instead. The census says only “Saxony”.</p>
+    <ul class="people">
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Michael Schnaus (Snouse) &amp; Mariah Thomas</span> <span class="conf rec">1860 census</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:MCGX-8K8" target="_blank" rel="noopener">Michael record</a></span><div class="where">born 1795 &amp; 1797 · Saxony → Greenville, Ohio</div><div class="rel">4th-great-grandparents</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">John Snouse</span> <span class="conf rec">1860 census</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:MCGX-8K6" target="_blank" rel="noopener">record</a></span><div class="where">born 1842 · Saxony → Ohio as a child · died 1921, Greenville</div><div class="rel">3rd-great-grandfather</div><div class="note">The family name changed from Schnaus to Snouse in America, a common way to anglicise it. His son Harry, born in Iowa in 1874, was an English speaker.</div></div></li>
+    </ul>
+  </div>
+
+  <div class="lang">
+    <h3>Alsatian (Elsässisch), and its northern cousin</h3>
+    <p class="about">Alsace was ruled by France from the 1600s, but villagers there spoke German dialects, with French only among officials and the elite. Most of Alsace speaks Low Alemannic, close to the speech of Baden across the Rhine. The far north, beyond the Haguenau forest around Wissembourg, speaks a Franconian dialect much closer to the Palatine German next door.</p>
+    <ul class="people">
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Rudolph Brown (Braun) &amp; Catharina Pflughaupt</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/KZT2-3VB" target="_blank" rel="noopener">Rudolph tree</a></span><div class="where">born 1702 &amp; 1714 · Pfaffenhoffen &amp; Schwindratzheim, Bas-Rhin → York, Pennsylvania</div><div class="rel">8th-great-grandparents</div><div class="note">Alsatian proper (Low Alemannic). Both villages lie south and west of Haguenau, in the Alemannic heartland of Lower Alsace.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Marcus Bigler</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/L17Y-97Q" target="_blank" rel="noopener">tree</a></span><div class="where">born 1705 · Ingolsheim, Bas-Rhin → Frederick County, Maryland</div><div class="rel">8th-great-grandfather</div><div class="note">Ingolsheim is in the Outre-Forêt, the corner north of the Haguenau forest, where the local speech is usually classed as South Franconian rather than Alemannic. So Marcus probably sounded more like a Palatine German than like the Browns, even though both families were “Alsatian”.</div></div></li>
+    </ul>
+  </div>
+
+  <div class="lang">
+    <h3>Palatine German (Pfälzisch) and its neighbours</h3>
+    <p class="about">The Rhine Franconian dialects of the Palatinate and southern Hesse. The 1709–10 refugees to London and New York were called “Palatines” whatever their exact origin. In America, the Palatine dialect is the main ancestor of Pennsylvania Dutch.</p>
+    <ul class="people">
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Johann Henrich Mattice</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/LCMG-5ZW" target="_blank" rel="noopener">tree</a></span><div class="where">born 1667 · the Palatinate → Schoharie, New York (1710 emigration)</div><div class="rel">8th-great-grandfather</div><div class="note">One of the 1710 Palatines. In Schoharie his German-speaking family settled beside Dutch-speaking families like the Vroomans and married into them. The Beckers of Schoharie came out of that same German–Dutch mixing.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Helena Catharina Melchior</span> <span class="conf">tree</span><div class="where">born 1662 · Leeheim, Hesse (Hessian Ried)</div><div class="rel">8th-great-grandmother</div><div class="note">South Hessian, a Rhine Franconian dialect very close to Palatine.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Regina Christina Markley</span> <span class="conf">tree</span><div class="where">born 1699 · Bonfeld, Kraichgau, Baden → Virginia</div><div class="rel">8th-great-grandmother</div><div class="note">The Kraichgau speaks South Franconian, between Palatine and Swabian.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Joseph Multer (Mölter)</span> <span class="conf">tree vs census</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:MC17-QKW" target="_blank" rel="noopener">record</a></span><div class="where">born 1787 · Fulda, Hesse (tree) or New York (1850 census)</div><div class="rel">4th-great-grandfather</div><div class="note">The tree says Fulda, where people spoke East Hessian. The census says he was born in New York. Either way his father, Philipp Ludwig Mölter, was German-born, so German was the family's home language a generation back.</div></div></li>
+    </ul>
+  </div>
+
+  <div class="lang">
+    <h3>Swiss German: Bernese Oberland, and Baden's Alemannic</h3>
+    <p class="about">The high Alemannic dialects of Switzerland and the far south-west of Germany. The Kandertal is an Alpine valley of the Bernese Oberland. Its speech is among the most conservative German dialects, and hard for other Germans to follow.</p>
+    <ul class="people">
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Johannes Peter Schleiffer (Slifer)</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/G2P5-J7M" target="_blank" rel="noopener">tree</a></span><div class="where">born 1718 · Reichenbach im Kandertal, Canton Bern → York, Pennsylvania</div><div class="rel">8th-great-grandfather</div><div class="note">Bernese Oberland German. Many Swiss Reformed and Mennonite emigrants took this route into Pennsylvania in the 1730s and 40s.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Jacob Yeazel (Iselstein)</span> <span class="conf">tree</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:XH2H-TDM" target="_blank" rel="noopener">record</a></span><div class="where">born 1741 · Wies, near Lörrach, Baden → Virginia, then Kentucky</div><div class="rel">7th-great-grandfather</div><div class="note">Wies lies in the Black Forest hills just north of Basel. Its dialect is Alemannic, close to Basel Swiss German.</div></div></li>
+    </ul>
+  </div>
+
+  <div class="lang">
+    <h3>Pennsylvania Dutch (Deitsch)</h3>
+    <p class="about">The German that formed in colonial Pennsylvania and Maryland from Palatine, Alsatian and Swiss speech. Here “Dutch” comes from Deitsch, meaning German, not from Holland. The American-born Slifers, Browns, Millers and Biglers of York County, Pennsylvania, and Frederick County, Maryland, probably spoke it into the early 1800s, before the move to Ohio. Some families also came from Germantown, settled in 1683 by German and Dutch Mennonites, including the papermaking Rittenhouse family on the Smith side.</p>
+  </div>
+</section>
+
+<!-- SCOTS -->
+<section class="family" style="--fc:var(--f-wg)">
+  <header><span class="fam">West Germanic</span><h2>Scots</h2></header>
+  <div class="lang">
+    <span class="native">Lowland Scots: the language of Robert Burns</span>
+    <p class="about">Scots is a sister language of English, growing from the same Old English roots. In the 1700s and 1800s it was the everyday speech of the Scottish Lowlands, while English was for church and writing. The Scots ancestors came from at least four of its dialect regions.</p>
+    <p class="word">Everyday Scots words: <b>bairn</b> (child), <b>ken</b> (know), <b>kirk</b> (church), <b>dreich</b> (dreary weather).</p>
+    <ul class="people">
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">John McMaster</span> <span class="conf rec">1900 census, death record</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:VYZW-LP5" target="_blank" rel="noopener">record</a></span><div class="where">born 1827 · Sorn, Ayrshire → Illinois, 1852</div><div class="rel">3rd-great-grandfather</div><div class="note">Ayrshire Scots. Sorn is a few miles from Mossgiel farm near Mauchline, where Robert Burns wrote many of his best-known poems in the 1780s, in this same Ayrshire speech.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">John McMaster Sr. &amp; Ann Struthers</span> <span class="conf">tree</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:XYW5-R2N" target="_blank" rel="noopener">John record</a> <a href="https://www.familysearch.org/ark:/61903/1:1:XTKJ-RDZ" target="_blank" rel="noopener">Ann record</a></span><div class="where">born 1796 Dailly &amp; 1802 Sorn, Ayrshire → Altona, Illinois</div><div class="rel">4th-great-grandparents</div><div class="note">Dailly is in Carrick, south Ayrshire, which spoke Gaelic in the Middle Ages but Scots by their time. A baptism attached to John is at Maybole, the next parish, in 1797, so either way it is Carrick Scots. Ann’s baptism at Sorn is on record.</div></div></li>
+      <li><span class="side dad" title="Henderson branches">HEN</span><div><span class="who">John Orr</span> <span class="conf">tree</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:XTKP-HSW" target="_blank" rel="noopener">record</a></span><div class="where">born 1696 · North Ayrshire → York, Pennsylvania</div><div class="rel">7th-great-grandfather</div><div class="note">Ayrshire Scots too, so Ayrshire turns up on both sides of the family.</div></div></li>
+      <li><span class="side dad" title="Henderson branches">HEN</span><div><span class="who">Roger Keys, Sarah Adair, William Adair</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/LVWC-RJD" target="_blank" rel="noopener">Roger tree</a> <a href="https://www.familysearch.org/ark:/61903/1:1:VQHX-TYL" target="_blank" rel="noopener">Sarah record</a> <a href="https://www.familysearch.org/ark:/61903/1:1:XTV7-2XP" target="_blank" rel="noopener">William record</a></span><div class="where">born 1718, 1717, 1689 · Dumfries &amp; Galloway; Portpatrick; Wigtown → Virginia</div><div class="rel">6th- and 7th-great-grandparents</div><div class="note">Galloway Scots, though the baptism attached to William Adair is at Ayr. Gaelic had lingered in Galloway into the 1700s; tradition puts its last speaker's death around 1760. So William Adair, born in 1689, may have heard older neighbours speak it.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Archibald Gardner · Elizabeth Ann Hamilton · John Henderson</span> <span class="conf">tree</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:VQWL-2ML" target="_blank" rel="noopener">Archibald record</a> <a href="https://www.familysearch.org/ark:/61903/1:1:X1R3-QP1" target="_blank" rel="noopener">Elizabeth record</a> <a href="https://ancestors.familysearch.org/en/GC4J-1BJ" target="_blank" rel="noopener">John tree</a></span><div class="where">Paisley 1721 · Bo'ness 1698 · Prestonpans 1676</div><div class="rel">7th- and 8th-great-grandparents</div><div class="note">West-central and Lothian Scots, the speech of Glasgow's hinterland and the Firth of Forth. The Prestonpans Henderson has no known connection to the Virginia and Texas Hendersons.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">John Walker &amp; Henry Alexander Walker</span> <span class="conf">tree</span><div class="where">born 1706 &amp; 1675 · Peterculter, Aberdeenshire</div><div class="rel">7th- and 8th-great-grandfathers</div><div class="note">The Doric, the distinctive North-East Scots of Aberdeenshire, where “what” is <b>fit</b>.</div></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- CELTIC -->
+<section class="family" style="--fc:var(--f-cel)">
+  <header><span class="fam">Celtic</span><h2>Scottish Gaelic and Irish</h2></header>
+  <div class="lang">
+    <h3>Scottish Gaelic (Gàidhlig)</h3>
+    <p class="about">The Highland language. Kintyre was a frontier where Gaelic met the Lowland Scots planted around Campbeltown in the 1600s. As late as 1794 about two-thirds of Campbeltown's people still spoke Gaelic.</p>
+    <ul class="people">
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Andrew McClain</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/KFDW-G8C" target="_blank" rel="noopener">tree</a></span><div class="where">born 1745 · Campbeltown, Kintyre, Argyll → New Jersey</div><div class="rel">7th-great-grandfather</div><div class="note">Very likely a Gaelic speaker, also fluent in Scots. His surname is Gaelic, from Mac Gill-Eain, “son of the servant of St John”. He was born the year of the last Jacobite rising.</div></div></li>
+    </ul>
+  </div>
+  <div class="lang">
+    <h3>Irish (Gaeilge), and the English of Ireland and Ulster</h3>
+    <p class="about">In the 1700s and early 1800s Irish was still the language of most of rural Ireland, especially the west and north-west. Protestant settlers, Quakers and town families mostly spoke English, or in Ulster, Ulster Scots. For each person below, their likely speech depends as much on community and religion as on place.</p>
+    <p class="word">Many Irish surnames are translations: <b>Ward</b> is Mac an Bhaird, “son of the bard”, a famous family of hereditary poets in Donegal.</p>
+    <ul class="people">
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">James Ward</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/L69S-NYX" target="_blank" rel="noopener">tree</a></span><div class="where">born 1701 · Inishowen, Co. Donegal → Augusta Co., Virginia</div><div class="rel">8th-great-grandfather</div><div class="note">Inishowen was strongly Irish-speaking, and Ward is a Gaelic bardic name. He may well have been an Irish speaker, the likeliest on either side.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">John J. Smith</span> <span class="conf rec">censuses</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:M82B-MG4" target="_blank" rel="noopener">record</a></span><div class="where">born about 1820 · Co. Tyrone, Ulster → Iowa</div><div class="rel">4th-great-grandfather</div><div class="note">Ulster English, with Irish still common in parts of Tyrone then. Which one he spoke depends on whether his family was Catholic (Smith often translates Mac Gabhann) or Protestant.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Thomas Tully</span> <span class="conf rec">Utah death record</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:NQHK-KXR" target="_blank" rel="noopener">record</a></span><div class="where">born 1811 · Ireland (mother's family from Co. Mayo) → Salt Lake City</div><div class="rel">5th-great-grandfather</div><div class="note">From an English-speaking professional family (his father was a doctor born in Cumberland, England), living in a county where most people then spoke Irish.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">John Erskine · Hugh Cowan</span> <span class="conf">tree</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:M4HZ-639" target="_blank" rel="noopener">John record</a> <a href="https://ancestors.familysearch.org/en/LZLL-HL3" target="_blank" rel="noopener">Hugh tree</a></span><div class="where">Co. Down 1764 · Newry 1700 → Pennsylvania</div><div class="rel">6th- and 7th-great-grandfathers</div><div class="note">Ulster Scots, the Scots of the Ulster plantation. County Down was one of its strongholds. But the 1850 census says John Erskine was born in Scotland, not County Down. If so, he spoke Lowland Scots.</div></div></li>
+      <li><span class="side dad" title="Henderson branches">HEN</span><div><span class="who">John Courtney Mickle &amp; Mary Jane Watson</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/L56Z-31W" target="_blank" rel="noopener">John tree</a> <a href="https://ancestors.familysearch.org/en/GL7K-8ZH" target="_blank" rel="noopener">Mary tree</a></span><div class="where">born 1705 &amp; 1715 · Co. Offaly &amp; Co. Meath → Adams Co., Pennsylvania</div><div class="rel">7th-great-grandparents</div><div class="note">Irish Quakers, an English-speaking community. Mary Jane's father, Thomas Watson, had moved to Ireland from Shropshire.</div></div></li>
+    </ul>
+  </div>
+  <div class="lang">
+    <h3>Welsh (Cymraeg), maybe</h3>
+    <ul class="people">
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Mary Verity Evans</span> <span class="conf">tree</span><div class="where">born 1705 · Radnorshire, Wales → New Jersey</div><div class="rel">8th-great-grandmother</div><div class="note">Radnorshire, on the English border, had largely switched from Welsh to English by 1700, so she probably spoke English, though Welsh is possible.</div></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ENGLISH -->
+<section class="family" style="--fc:var(--f-wg)">
+  <header><span class="fam">West Germanic</span><h2>English, from many counties</h2></header>
+  <div class="lang">
+    <p class="about">The English immigrants on both sides came from very different dialect regions. A Lancashire weaver, a Wiltshire farmer and a London shipwright of 1680 would each have sounded distinct. The Quakers among them also used “plain speech”: <b>thee</b> and <b>thou</b> to everyone, and numbered months instead of names like January.</p>
+    <ul class="people">
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Richard Woodward · Francis Stanfield · John Millison</span> <span class="conf">tree</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:F3G9-W31" target="_blank" rel="noopener">Richard record</a> <a href="https://ancestors.familysearch.org/en/LDZG-CYY" target="_blank" rel="noopener">Francis tree</a> <a href="https://ancestors.familysearch.org/en/LJ16-JW6" target="_blank" rel="noopener">John tree</a></span><div class="where">Acton, Cheshire 1639 · Garston, Lancashire 1642 · Oldham, Lancashire 1685 → Chester Co., Pennsylvania</div><div class="rel">7th- and 8th-great-grandfathers</div><div class="note">North-West English (Cheshire and Lancashire). Woodward and Stanfield were Quakers in Penn's first wave.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Joel Bayly · Edward Strode</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/LVWM-GZH" target="_blank" rel="noopener">Joel tree</a> <a href="https://www.familysearch.org/ark:/61903/1:1:J7NR-GNR" target="_blank" rel="noopener">Edward record</a></span><div class="where">Bromham, Wiltshire 1659 · Shepton Mallet, Somerset 1691</div><div class="rel">8th-great-grandfathers</div><div class="note">West Country English, the burr that later shaped “pirate talk”. The baptism attached to Strode is at Mells, a village near Shepton Mallet, in 1690.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">John Bentley · Joseph Hayes</span> <span class="conf">tree</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:J7HL-F3P" target="_blank" rel="noopener">John record</a> <a href="https://ancestors.familysearch.org/en/LJBP-Y38" target="_blank" rel="noopener">Joseph tree</a></span><div class="where">Great Gransden, Huntingdonshire 1656 · Spelsbury, Oxfordshire 1698</div><div class="rel">8th- and 7th-great-grandfathers</div><div class="note">East and South Midlands English, the region that standard English grew from.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Benjamin Betterton</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/KFRP-87Q" target="_blank" rel="noopener">tree</a></span><div class="where">born 1704 · Stepney, London → Philadelphia</div><div class="rel">8th-great-grandfather</div><div class="note">East London English. Stepney was a riverside parish of sailors and shipbuilders.</div></div></li>
+      <li><span class="side mom" title="Snouse and Ashmead branches">SNO</span><div><span class="who">Dr. William Edward Tully</span> <span class="conf">tree</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/K89B-TJR" target="_blank" rel="noopener">tree</a></span><div class="where">born 1780 · Cumberland → Ireland → Perth, Ontario</div><div class="rel">6th-great-grandfather</div><div class="note">Cumbrian, a northern dialect with Norse roots in its vocabulary.</div></div></li>
+      <li><span class="side dad" title="Henderson branches">HEN</span><div><span class="who">The Virginia Hendersons</span> <span class="conf">tree</span><div class="where">William Henderson b. 1700, King and Queen Co.; Mary Woolfolk b. 1699, Gloucester Co.</div><div class="rel">7th-great-grandparents</div><div class="note">Already American-born, speaking the colonial English of Tidewater Virginia. That speech went west with the family into Georgia and Texas and became part of the Southern accent. Their own English origins haven't been traced.</div></div></li>
+      <li><span class="side dad" title="Henderson branches">HEN</span><div><span class="who">William Phillips</span> <span class="conf">doubtful</span> <span class="cites"><a href="https://www.familysearch.org/ark:/61903/1:1:J3MC-YY7" target="_blank" rel="noopener">record</a></span><div class="where">born 1655 · Bromley, Kent</div><div class="rel">8th-great-grandfather, if the Ann Thompson link is right</div><div class="note">Kentish English. This line hangs on the doubtful Ann Thompson link.</div></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ROMANCE -->
+<section class="family" style="--fc:var(--f-rom)">
+  <header><span class="fam">Romance</span><h2>French, possibly</h2></header>
+  <div class="lang">
+    <ul class="people">
+      <li><span class="side dad" title="Henderson branches">HEN</span><div><span class="who">“French John” Manack</span> <span class="conf">doubtful</span> <span class="cites"><a href="https://ancestors.familysearch.org/en/G6DK-D5F" target="_blank" rel="noopener">tree</a></span><div class="where">born about 1760 · said to be from “San Domingo” → Elbert Co., Georgia</div><div class="rel">5th-great-grandfather</div><div class="note">If he really was a Frenchman from Saint-Domingue (now Haiti), he spoke French, and almost certainly knew the colony's Creole, the ancestor of Haitian Kreyòl. As a “French Indian trader” in Georgia he would also have needed some Muskogee (Creek), the backcountry trade language. All of this rests on one unsourced note, so treat it as a possibility.</div></div></li>
+    </ul>
+  </div>
+</section>
+
+<section class="box">
+  <h2 style="font-size:1.3rem">When did each family switch to English?</h2>
+  <ul class="plain">
+    <li><strong>The Henderson side</strong> was English-speaking almost throughout. The exceptions are Fred Peterson (Danish, came in 1883), the 1700s Scots and Irish settlers, and possibly John Manack.</li>
+    <li><strong>New York Dutch</strong> (Vrooman, Bradt, Van Slyck, Hagedoorn) lasted about 150 years in America, fading in Schoharie around 1800. Lorinda Multer (born 1838) grew up speaking English.</li>
+    <li><strong>Pennsylvania Dutch</strong> (Slifer, Brown, Miller, Bigler) faded once the families moved to Ohio in the early 1800s.</li>
+    <li><strong>Swabian and Saxon German</strong> (Huber, Snouse) were spoken in Greenville, Ohio, from the 1840s. Harry Snouse, born 1874, was probably the first in his line to speak only English.</li>
+    <li><strong>Ayrshire Scots</strong> came over with the McMasters in 1852. Their Illinois-born children, including Mary E. McMaster (born 1877), spoke American English, perhaps with a few Scots words at home.</li>
+  </ul>
+</section>
+
+<footer class="src">
+  <strong>Notes on sources.</strong> Birthplaces come from the FamilySearch shared tree and an Ancestry tree, checked against census and vital records where marked <em>record</em>. Language is inferred from place and period, not from any record of what each person said. Background:
+  <ul>
+    <li><a href="https://en.wikipedia.org/wiki/Galwegian_Gaelic">Galwegian Gaelic</a> (the conventional end date of 1760)</li>
+    <li><a href="https://www.argyll-bute.gov.uk/sites/default/files/2023-07/GaelicInKintyreLeaflet.pdf">Argyll &amp; Bute Council: Gaelic in Kintyre</a> (Campbeltown in 1794)</li>
+    <li><a href="https://en.wikipedia.org/wiki/Alsatian_dialect">Alsatian dialect</a> (Franconian in the north of Alsace)</li>
+    <li><a href="https://schenectadyhistory.org/resources/patent/vanslyck_c.html">Pearson, Schenectady Patent: Van Slyck</a> (Jacques Van Slyck and his Mohawk mother)</li>
+  </ul>
+</footer>
+</main>
+
+</body>
+</html>

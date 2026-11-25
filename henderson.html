@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="An animated map of the Henderson family and its branches, 1610 to 2000, with links to records.">
+<title>Henderson Family Migrations</title>
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img,svg{max-width:100%}[hidden]{display:none!important}</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: night-chart map (dark-first) with a timeline bar beneath and a chronicle panel beside it; stacks on phones */
+:root{
+  --bg:#0b151d; --panel:#122230; --line:#22384a; --ink:#e7eef2; --muted:#93a8b5;
+  --ocean:#0e1c27; --land:#1d2e3a; --border:#3a5567;
+  --c-hen:#eba845; --c-wiv:#e07f70; --c-wor:#93cc7c; --c-pet:#72b8ea; --c-bis:#bd98e6; --c-cox:#5fc7b4; --c-ens:#f4efe6;
+  --hl:#f2c14e; --display:"Newsreader",Georgia,serif; --ui:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){ --hl:#a86f00;
+  --bg:#f2f5f7; --panel:#ffffff; --line:#cfdbe3; --ink:#14232e; --muted:#566c7d;
+  --ocean:#d6e5ee; --land:#f7f9f8; --border:#9fb5c4;
+  --c-hen:#b56d0c; --c-wiv:#b8473a; --c-wor:#3f8a2c; --c-pet:#1f6fae; --c-bis:#7a4cb3; --c-cox:#13806e; --c-ens:#3a3a3a;
+  color-scheme:light}}
+:root[data-theme="light"]{ --hl:#a86f00;
+  --bg:#f2f5f7; --panel:#ffffff; --line:#cfdbe3; --ink:#14232e; --muted:#566c7d;
+  --ocean:#d6e5ee; --land:#f7f9f8; --border:#9fb5c4;
+  --c-hen:#b56d0c; --c-wiv:#b8473a; --c-wor:#3f8a2c; --c-pet:#1f6fae; --c-bis:#7a4cb3; --c-cox:#13806e; --c-ens:#3a3a3a;
+  color-scheme:light}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1280px;margin:0 auto;padding-block:20px 40px;display:flex;flex-direction:column;gap:16px}
+header{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:8px 24px}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(1.6rem,3.2vw,2.3rem);line-height:1.1;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0;max-width:62ch}
+.grid{display:grid;grid-template-columns:minmax(0,2.3fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.mapbox{position:relative;background:var(--ocean);border:1px solid var(--line);border-radius:6px;overflow:hidden;aspect-ratio:1000/620;max-width:100%}
+#map{display:block;width:100%;height:100%}
+.year{position:absolute;left:14px;top:8px;font-family:var(--display);font-size:clamp(2rem,6vw,3.6rem);font-weight:500;color:var(--ink);opacity:.92;pointer-events:none;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.caption{position:absolute;left:12px;right:12px;bottom:10px;background:color-mix(in srgb,var(--panel) 88%,transparent);border:1px solid var(--line);border-radius:4px;padding:6px 10px;font-size:.86rem;min-height:2.2em;pointer-events:none}
+.caption b{font-family:var(--mono);font-weight:500;margin-right:6px}
+.caption[hidden]{display:none}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.controls button{font:600 .9rem var(--ui);background:var(--c-hen);color:#14100a;border:0;border-radius:4px;padding:7px 14px;cursor:pointer;min-width:6.5em}
+.controls button:focus-visible,.controls input:focus-visible,.controls select:focus-visible,.chip input:focus-visible+span{outline:2px solid var(--c-pet);outline-offset:2px}
+.controls input[type=range]{flex:1 1 220px;min-width:0;accent-color:var(--c-hen)}
+.controls label{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.controls select{font:inherit;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:4px 6px}
+.ticks{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+aside{display:flex;flex-direction:column;gap:14px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;min-width:0}
+.card h2{font-family:var(--display);font-weight:600;font-size:1.1rem;margin:0 0 8px}
+.chips{display:flex;flex-direction:column;gap:6px}
+.chip{display:flex;align-items:center;gap:8px;font-size:.86rem;cursor:pointer}
+.chip input{position:absolute;opacity:0;width:1px;height:1px}
+.chip span.sw{width:22px;height:4px;border-radius:2px;flex:none}
+.chip input:not(:checked)~span{opacity:.35}
+.conf{display:grid;grid-template-columns:44px 1fr;gap:4px 10px;font-size:.8rem;color:var(--muted);margin-top:10px;align-items:center}
+.conf svg{display:block}
+.log{max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;font-size:.82rem;padding-right:4px}
+.log .ev{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:4px;border-radius:3px;border-left:3px solid transparent}
+.log .ev[hidden]{display:none}
+.log button{all:unset;cursor:pointer;display:grid;grid-template-columns:3.2em minmax(0,1fr);gap:8px;padding:4px 6px;border-radius:3px;min-width:0}
+.cite{font-family:var(--mono);font-size:.7rem;color:var(--muted);padding:5px 4px;text-underline-offset:2px}
+.cite.rec{color:var(--c-pet)}
+.cite:focus-visible,.src a:focus-visible{outline:2px solid var(--c-pet);outline-offset:1px}
+.hlcard .src{font-size:.78rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 10px}
+.hlcard .src:empty{display:none}
+.hlcard .src a{color:var(--c-pet)}
+.log button:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.log button:focus-visible{outline:2px solid var(--c-pet)}
+.log .y{font-family:var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.log .on{background:color-mix(in srgb,var(--ink) 10%,transparent)}
+.log .who{font-weight:600}
+.note{font-size:.84rem;color:var(--muted)}
+.note p{margin:0 0 6px}
+.note strong{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.mapwrap{position:relative;display:flex;flex-direction:column;gap:10px}
+.hlcard{position:absolute;top:10px;right:10px;width:min(340px,calc(100% - 20px));max-height:calc(100% - 20px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--hl);border-radius:6px;padding:12px 14px;box-shadow:0 8px 28px rgba(0,0,0,.28);display:flex;flex-direction:column;gap:6px;z-index:5}
+.hlcard[hidden]{display:none}
+.hlcard .hy{font-family:var(--mono);font-size:.76rem;color:var(--hl);letter-spacing:.05em}
+.hlcard h3{font-family:var(--display);font-size:1.25rem;line-height:1.2;margin:0;font-weight:600;text-wrap:balance}
+.hlcard p{margin:0;font-size:.9rem;line-height:1.55}
+.hlcard .row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap}
+.hlcard .hp{font-size:.78rem;color:var(--muted)}
+.hlcard button{font:600 .85rem var(--ui);background:var(--hl);color:#1a1405;border:0;border-radius:4px;padding:7px 16px;cursor:pointer}
+.hlcard button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+@media (max-width:760px){.hlcard{position:static;width:auto;max-height:none;box-shadow:none}}
+.log .star{background:color-mix(in srgb,var(--hl) 10%,transparent)}
+.log .star .who{color:var(--hl);font-weight:600}
+.chip .cn{display:block}.chip .cd{display:block;font-size:.74rem;color:var(--muted);line-height:1.3}
+.controls .pz{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.about p{margin:0 0 6px}
+nav.fam{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:.88rem;padding-block:12px 0;max-width:1280px;margin:0 auto}
+nav.fam a{color:inherit;opacity:.75;text-underline-offset:3px}nav.fam a[aria-current]{opacity:1;font-weight:600;text-decoration:none}
+</style>
+</head>
+<body>
+<nav class="fam" aria-label="Family history pages"><a href="index.html">Start</a><a href="henderson.html" aria-current="page">Henderson map</a><a href="snouse-ashmead.html">Snouse &amp; Ashmead map</a><a href="languages.html">Languages</a><a href="lore.html">Lore vs. records</a></nav>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Henderson Family Migrations, 1610–2000</h1>
+      <p class="sub">The Henderson and Peterson ancestors: <em>Mayflower</em> Pilgrims and the founders of Connecticut towns, and families from Scotland, Ireland, England and Denmark, into Virginia, through the Georgia cotton country and Mississippi, to Texas and the Pacific Northwest. ★ marks moments in history they lived through.</p>
+    </div>
+  </header>
+
+  <div class="grid">
+    <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+      <div class="mapwrap"><div class="mapbox">
+        <svg id="map" viewBox="0 0 1000 620" role="img" aria-label="Animated map of family movements"></svg>
+        <div class="year" id="yearBig">2000</div>
+        <div class="caption" id="caption">Press Play to watch three and a half centuries of movement. Every line is a journey. The dot is the person, alive at that time.</div>
+      </div>
+      <div class="hlcard" id="hl" hidden aria-live="polite"><span class="hy"><span id="hlYear"></span> · <span id="hlNum"></span></span><h3 id="hlTitle"></h3><p id="hlBody"></p><p class="src" id="hlSrc"></p><div class="row"><span class="hp" id="hlPlace"></span><button id="hlGo" type="button">Continue</button></div></div></div>
+      <div class="controls">
+        <button id="play" type="button">Play</button>
+        <input id="scrub" type="range" min="1610" max="2000" step="0.1" value="2000" aria-label="Year">
+        <label for="speed">Speed
+          <select id="speed"><option value="1.5">Slow</option><option value="3" selected>Normal</option><option value="7">Fast</option></select>
+        </label>
+        <label class="pz" for="pauseHL"><input type="checkbox" id="pauseHL" checked> Pause for ★ stories</label>
+        <span class="ticks">1610 → 2000</span>
+      </div>
+    </div>
+
+    <aside>
+      <div class="card">
+        <h2>Family lines</h2>
+        <div class="chips" id="chips"></div>
+        <div class="conf">
+          <svg width="44" height="8"><line x1="2" y1="4" x2="42" y2="4" stroke="currentColor" stroke-width="2.4"/></svg><span>Record I read myself</span>
+          <svg width="44" height="8"><line x1="2" y1="4" x2="42" y2="4" stroke="currentColor" stroke-width="1.3" opacity=".8"/></svg><span>Family trees or family memory, not checked</span>
+          <svg width="44" height="8"><line x1="2" y1="4" x2="42" y2="4" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3"/></svg><span>Assumed or inferred move</span>
+          <svg width="44" height="8"><line x1="2" y1="4" x2="42" y2="4" stroke="currentColor" stroke-width="1.5" stroke-dasharray="1.5 3"/></svg><span>Doubtful claim</span>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Chronicle</h2>
+        <p class="note" style="margin:0 0 8px">Tap a line to jump to that year. “record” opens the document itself, and “tree” or “page” opens a profile. FamilySearch records need a free sign-in.</p>
+        <div class="log" id="log"></div>
+      </div>
+      <div class="card note">
+        <h2>About the Haiti thread</h2>
+        <p>A single note on FamilySearch says Nancy Manack's father, "French John" Manack, came "from San Domingo". In the 1700s that usually meant <strong>Saint-Domingue</strong>, the French colony that became Haiti. No source is given, and it could also mean Spanish Santo Domingo.</p>
+        <p>The map shows it as a dotted line because it is unproven. Elbert County deed records, or his 1796 estate file, could confirm where he came from.</p>
+      </div>
+      <div class="card note about">
+        <h2>About this map</h2>
+        <p>Thanks to a correction from a family member, later moves now follow the family’s own memory. <a href="lore.html" style="color:var(--c-pet)">Lore vs. records</a> lists where the documents and the stories disagree.</p>
+        <p>This map was researched by Austin in November 2026, with Claude (an AI model), using census and vital records on FamilySearch, an Ancestry family tree, Georgia probate records, Texas State Library service records, published county and town histories, and sourced profiles on WikiTree for the New England families. A few links in those early lines still rest on family trees.</p>
+        <p>Thick lines are journeys backed by a record. Thin lines come from family trees that haven't been checked, dashed lines are reasonable guesses (for example, an emigration date worked out from where children were born), and dotted lines are family stories that remain unproven.</p>
+        <p>★ stories set the family against the history happening around them. Turn off “Pause for ★ stories” to let the map run straight through.</p>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+const P={
+ kq:[-76.88,37.67,'King and Queen Co., Virginia'], glo:[-76.52,37.40,'Gloucester Co., Virginia'],
+ cul:[-77.91,38.44,'Culpeper Co., Virginia'], rich:[-76.73,37.95,'Richmond Co., Virginia'],
+ elb:[-82.80,34.08,'Elbert Co., Georgia'], wil:[-82.74,33.74,'Wilkes Co., Georgia'],
+ sd:[-72.20,19.76,'Saint-Domingue (Haiti)?'], joh:[-78.37,35.52,'Johnston Co., North Carolina'],
+ msh:[-89.45,34.77,'Marshall Co., Mississippi'], mar:[-87.80,32.31,'Marengo Co., Alabama'],
+ fay:[-89.35,35.24,'Fayette Co., Tennessee'], hou:[-95.46,31.32,'Houston Co., Texas'],
+ gra:[-97.79,32.44,'Granbury, Texas'], pid:[-97.88,31.29,'Pidcoke, Coryell Co., Texas'],
+ col:[-99.43,31.83,'Coleman, Texas'], cha:[-79.18,35.72,'Chatham Co., North Carolina'],
+ san:[-100.44,31.46,'San Angelo, Texas'], waco:[-97.15,31.55,'Waco, Texas'], wax:[-96.85,32.39,'Waxahachie, Texas'],
+ ct:[-72.68,41.76,'Connecticut'], oh:[-83.0,39.96,'Ohio'], sal:[-123.04,44.94,'Salem, Oregon'],
+ okm:[-95.96,35.62,'Okmulgee, Oklahoma'], jc:[-92.17,38.58,'Jefferson City, Missouri'],
+ herk:[-74.97,43.14,'Herkimer Co., New York'], den:[9.5,56.0,'Denmark'], webb:[-94.47,37.15,'Webb City, Missouri'],
+ van:[-122.66,45.64,'Vancouver, Washington'], ww:[-118.34,46.06,'Walla Walla, Washington'], chi:[-87.63,41.88,'Chicago, Illinois'],
+ wva:[-81.98,36.71,'Washington Co., Virginia'], deer:[-122.87,46.0,'Deer Island, Oregon'], till:[-123.80,45.37,'Tillamook Co., Oregon'],
+ colpa:[-76.45,41.08,'Columbia Co., Pennsylvania'], salny:[-73.60,41.33,'Salem, Westchester Co., New York'],
+ lanc:[-76.31,40.04,'Lancaster, Pennsylvania'], york:[-76.73,39.96,'York, Pennsylvania'], adams:[-77.28,39.95,'Adams Co., Pennsylvania'],
+ rock:[-79.44,37.78,'Rockbridge Co., Virginia'], aug:[-79.07,38.15,'Augusta Co., Virginia'],
+ dg:[-3.60,55.07,'Dumfries and Galloway, Scotland'], port:[-5.12,54.84,'Portpatrick, Scotland'], wig:[-4.44,54.87,'Wigtown, Scotland'],
+ ayr:[-4.75,55.70,'Ayrshire, Scotland'], off:[-7.50,53.25,'Co. Offaly, Ireland'], mea:[-7.12,53.40,'Co. Meath, Ireland'],
+ grot:[-72.08,41.35,'Groton, Connecticut'], ston:[-71.91,41.34,'Stonington, Connecticut'], madny:[-75.13,44.75,'Madrid, New York'],
+ reyn:[-78.89,41.10,'Reynoldsville, Pennsylvania'], swan:[-71.19,41.75,'Swansea, Massachusetts'],
+ pane:[-76.03,36.85,'Princess Anne Co., Virginia'], har:[-94.37,32.55,'Harrison Co., Texas'], tnc:[-86.5,35.9,'Tennessee'], brom:[0.02,51.41,'Bromley, Kent, England']
+};
+const G={
+ hen:['Henderson','--c-hen','Virginia → Georgia → Texas'],
+ wiv:['Henderson wives’ families','--c-wiv','Woolfolk, Alexander, Manack, Tyner, Honnoll, Farrell'],
+ wor:['Worden & Cook','--c-wor','Connecticut and Ohio to Texas'],
+ pet:['Peterson','--c-pet','Denmark → New York → Oklahoma'],
+ bis:['Bishop, Reed & Scots-Irish lines','--c-bis','Scotland and Ireland → Virginia → Washington'],
+ mfl:['Mayflower & New England','--c-ens','Leiden and England → Plymouth and Connecticut'],
+ cox:['Cox & Burrows','--c-cox','New England → New York and Pennsylvania → Washington']
+};
+// stops: [year, place, confidence D|T|A|Q, note]
+const T=[
+ {n:'William Henderson',g:'hen',d:1759,s:[[1700,'kq','T','Born, King and Queen Co., Virginia'],[1740,'cul','T','Settles in Culpeper County'],[1759,'cul','T','Dies at Brumfield, Culpeper']]},
+ {n:'John Henderson',g:'hen',d:1763,s:[[1725,'kq','T','Born, King and Queen Co.'],[1745,'cul','T','In Culpeper; son Joseph born at Stevensburg'],[1763,'cul','T','Dies, Culpeper']]},
+ {n:'Joseph Henderson',g:'hen',d:1816,s:[[1745,'cul','T','Born, Stevensburg, Culpeper Co.'],[1776,'cul','T','Marries Mary Alexander'],[1788,'elb','A','Moves to Georgia, sometime 1783–90'],[1816,'elb','D','Dies 1815–17; his heirs later sell land to Simeon']]},
+ {n:'Simeon Henderson',g:'hen',d:1831,s:[[1783,'cul','T','Born, Culpeper Co., Virginia'],[1788,'elb','A','Taken to Georgia as a small child'],[1819,'elb','D','Buys 779 acres on Van’s Creek from his father’s heirs'],[1830,'elb','D','Writes his will, naming Nancy and ten children'],[1831,'elb','D','Dies, Elbert Co.']]},
+ {n:'Thomas Banks Henderson',g:'hen',d:1913,s:[[1827,'elb','D','Born, Elbert Co., Georgia (records disagree: Georgia, Tennessee or Mississippi)'],[1841,'msh','A','Probably goes west with his mother to Mississippi'],[1846,'fay','D','Marries Sarah Honnoll, Fayette Co., Tennessee'],[1847,'msh','D','Son William born in Mississippi'],[1849,'har','D','Son Thomas born, Harrison Co., Texas'],[1850,'hou','D','In Houston Co., Texas (1850 census)'],[1862,'hou','D','Joins Gould’s 6th Battalion Texas Cavalry (Confederate), Co. C; rises to corporal'],[1870,'hou','D','Farming in Precinct 4, Houston Co., with second wife Lavenia (1870 census)'],[1880,'hou','D','Houston Co. (1880 census)'],[1913,'gra','D','Dies in Hood Co., Texas (death record)']]},
+ {n:'Robert P. Henderson',g:'hen',d:1926,s:[[1854,'hou','D','Born, Houston Co., Texas'],[1870,'hou','D','With his father Thomas (1870 census)'],[1881,'hou','T','Marries Roberta Farrell'],[1890,'pid','T','Son William Clinton born at Pidcoke'],[1900,'pid','D','Coryell Co. (1900 census)'],[1904,'glc','D','Buys 160 acres near Glen Cove, Coleman Co.'],[1910,'glc','D','Glen Cove (1910 census)'],[1926,'glc','T','Dies in Coleman Co.; buried at Glen Cove']]},
+ {n:'William Clinton Henderson Sr.',g:'hen',d:1951,s:[[1890,'pid','D','Born July 1890, Coryell Co., Texas (draft card)'],[1910,'glc','D','Glen Cove, Coleman Co., with his parents (1910 census)'],[1914,'glc','D','Buys 160 acres with his mother and his brother Robert'],[1917,'waco','D','Registers for the draft in Waco'],[1923,'waco','D','Son William Clinton Jr. born in Waco'],[1930,'waco','D','McLennan Co. (1930 census)'],[1950,'waco','D','McLennan Co. (1950 census)'],[1951,'waco','T','Dies, Waco']]},
+ {n:'William Clinton Henderson Jr.',g:'hen',d:1995,s:[[1923,'waco','D','Born, Waco, Texas (Social Security record)'],[1930,'waco','D','With his parents (1930 census)'],[1955,'nsh','T','Nashville, Tennessee, before 1957 (family memory; dates unknown)'],[1957,'lex','T','Lexington, Kentucky (family memory)'],[1960,'jc','T','Moves to Missouri (family memory)'],[1995,'sal','D','Dies, Salem, Oregon (Oregon death index)']]},
+
+ {n:'Mary Woolfolk',g:'wiv',d:1728,s:[[1699,'glo','T','Born, Abingdon Parish, Gloucester Co.'],[1725,'kq','T','Son John born, King and Queen Co.'],[1728,'kq','T','Dies']]},
+ {n:'Ann Thompson',g:'wiv',d:1767,s:[[1731,'rich','Q','Born, North Farnham Parish (doubtful: too young to be Joseph’s mother)'],[1745,'cul','Q','Son Joseph born'],[1767,'cul','Q','Dies, Culpeper']]},
+ {n:'William Phillips',g:'wiv',d:1725,s:[[1655,'brom','Q','Born, Bromley, Kent (tree only); the attached baptism is Holborn, 1639, probably another man'],[1690,'rich','Q','In Richmond Co., Virginia'],[1725,'rich','Q','Dies']]},
+ {n:'Mary Alexander',g:'wiv',d:1818,s:[[1756,'cul','T','Born, Culpeper Co.'],[1776,'cul','T','Marries Joseph Henderson'],[1788,'elb','A','Moves to Georgia'],[1803,'elb','T','Inherits from her father, James Alexander of Madison Co., Va.'],[1818,'elb','T','Dies, Elbert Co.']]},
+ {n:'"French John" Manack',g:'wiv',d:1796,s:[[1760,'sd','Q','Said to come “from San Domingo”, per an unsourced note'],[1780,'elb','T','Owns 250 acres on Cold Water Creek'],[1796,'elb','T','Dies before April 1796']]},
+ {n:'Mary Tyner',g:'wiv',d:1828,s:[[1765,'joh','T','Born, Johnston Co., North Carolina'],[1775,'elb','A','With her parents in what became Elbert Co., Georgia'],[1780,'cow','A','Captured by a Creek party and taken to the Coweta towns (1779–82; exact year not recorded)'],[1785,'elb','A','John Manack buys her freedom; they marry (year approximate)'],[1828,'elb','T','Last record']]},
+ {n:'Nancy Manack',g:'wiv',d:1850,s:[[1787,'wil','T','Born, Wilkes Co., Georgia'],[1805,'elb','A','Marries Simeon Henderson'],[1830,'elb','D','Named in Simeon’s will'],[1841,'msh','D','Marries Thomas Allen, Marshall Co., Mississippi'],[1850,'msh','T','Dies, Marshall Co.']]},
+ {n:'William Honnell',g:'wiv',d:1831,s:[[1800,'tnc','A','Born about 1800, origin unknown'],[1827,'mar','D','Marries Nancy Adams, Marengo Co., Alabama'],[1831,'mar','D','Dead by Nov 1831; his heirs Sarah Jane, William Thomas and Kezia named in a deed of gift']]},
+ {n:'Nancy Adams',g:'wiv',d:1855,s:[[1810,'tnc','D','Born, Tennessee (1850 census)'],[1827,'mar','D','Marries William Honnell, Marengo Co.'],[1836,'mar','D','Widowed; marries Clinton Allen, Marengo Co.'],[1850,'hou','D','Houston Co., Texas, four doors from daughter Sarah (1850 census)']]},
+ {n:'Sarah J. C. Honnoll',g:'wiv',d:1867,s:[[1828,'mar','D','Born, Marengo Co., Alabama; daughter of William Honnell and Nancy Adams'],[1846,'fay','D','Marries Thomas B. Henderson, Fayette Co., Tennessee'],[1847,'msh','D','Son William born in Mississippi'],[1849,'har','D','Son Thomas born, Harrison Co., Texas'],[1850,'hou','D','Houston Co., Texas, near her mother (1850 census)'],[1860,'hou','D','Houston Co. (1860 census)'],[1867,'hou','A','Dies before 1870, when Thomas has a new wife (trees say 1867 or 1887)']]},
+ {n:'Roberta R. Farrell',g:'wiv',d:1950,s:[[1861,'cha','D','Born, North Carolina (1880 census); the tree says Chatham Co.'],[1875,'hou','A','Family moves to Texas'],[1880,'hou','D','Houston Co., with her parents (1880 census)'],[1881,'hou','T','Marries Robert Henderson, Houston Co.'],[1890,'pid','T','At Pidcoke'],[1910,'glc','D','Glen Cove, Coleman Co. (1910 census)'],[1935,'tal','D','At Talpa, Coleman Co. in 1935 (1940 census)'],[1940,'waco','D','With son William Clinton in McLennan Co. (1940 census)'],[1950,'san','T','Dies, San Angelo']]},
+
+ {n:'William L. Worden',g:'wor',d:1918,s:[[1854,'ct','D','Born Aug 1854, Connecticut (1900 census)'],[1880,'wax','A','Moves to Texas'],[1892,'wax','T','Daughter Mabel born (the tree says Waxahachie)'],[1900,'waco','D','Waco (1900 census)'],[1910,'waco','D','Waco (1910 census)'],[1918,'waco','T','Dies in Texas']]},
+ {n:'Sarah J. Cook',g:'wor',d:1915,s:[[1852,'oh','D','Born April 1852, Ohio (1900 census)'],[1880,'wax','A','In Texas'],[1900,'waco','D','Waco (1900 census)'],[1910,'waco','D','Waco (1910 census)'],[1915,'waco','T','Dies, Waco']]},
+ {n:'Mabel Ann Worden',g:'wor',d:1964,s:[[1892,'wax','T','Born Aug 1892 (1900 census and death record); the tree says Waxahachie'],[1900,'waco','D','Waco, with her parents (1900 census)'],[1910,'waco','D','Waco (1910 census)'],[1930,'waco','D','McLennan Co. (1930 census)'],[1950,'waco','D','McLennan Co. (1950 census)'],[1964,'waco','D','Dies, Waco (Texas death record)']]},
+
+ {n:'Fred Peterson',g:'pet',d:1905,s:[[1861,'den','D','Born Aug 1861, Denmark (1900 census)'],[1883,'herk','D','Emigrates in 1883 (1900 census)'],[1900,'herk','D','Middleville, Herkimer Co. (1900 census)']]},
+ {n:'Rosa Hierhoer',g:'pet',d:1905,s:[[1864,'herk','D','Born Feb 1864, New York (1900 census)'],[1900,'herk','D','Middleville, Herkimer Co. (1900 census)']]},
+ {n:'Frank H. Peterson',g:'pet',d:1950,s:[[1887,'herk','D','Born Nov 1887, New York (1900 census)'],[1900,'herk','D','Middleville, Herkimer Co., with father Fred (1900 census)'],[1919,'van','T','Marries Mary Audrey Bishop, Vancouver, Wash.'],[1920,'webb','D','Webb City, Missouri (1920 census)'],[1923,'okm','D','In Okmulgee, Oklahoma'],[1930,'okm','D','Okmulgee (1930 census)'],[1940,'okm','D','Okmulgee (1940 census)'],[1950,'okm','D','Furniture salesman, Okmulgee (1950 census)']]},
+ {n:'Doreen L. Peterson',g:'pet',d:2000,s:[[1928,'okm','D','Born about 1928, Oklahoma (1930 census)'],[1930,'okm','D','Okmulgee, aged 2, with a brother Frank of the same age, perhaps a twin (1930 census)'],[1940,'okm','D','Okmulgee, with parents (1940 census)'],[1955,'nsh','T','Nashville, Tennessee, before 1957 (family memory; dates unknown)'],[1957,'lex','T','Lexington, Kentucky (family memory)'],[1960,'jc','T','Moves to Missouri (family memory)']]},
+
+ {n:'Mary Audrey Bishop',g:'bis',d:1970,s:[[1898,'ww','D','Born Aug 1898, Washington (1900 census, Walla Walla)'],[1910,'van','D','Vancouver, Washington (1910 census)'],[1919,'van','T','Marries Frank Peterson'],[1920,'webb','D','Webb City, Missouri (1920 census)'],[1923,'okm','D','Okmulgee, Oklahoma'],[1930,'okm','D','Okmulgee (1930 census)'],[1950,'okm','D','Okmulgee (1950 census)'],[1967,'chi','T','Chicago'],[1970,'chi','T','Dies, Cook Co., Illinois']]},
+ {n:'Martin Van Buren Bishop',g:'bis',d:1923,s:[[1866,'wva','D','Born, Virginia (1870 census, Washington Co.)'],[1880,'wva','D','Holston, Washington Co. (1880 census)'],[1889,'ww','T','Marries Candace Cox, Walla Walla'],[1900,'ww','D','Walla Walla (1900 census)'],[1910,'van','D','Vancouver, Washington (1910 census)'],[1920,'deer','D','Deer Island, Oregon (1920 census)'],[1923,'till','D','Dies, Tillamook Co., Oregon']]},
+ {n:'Madison Tilson Bishop',g:'bis',d:1892,s:[[1827,'wva','T','Born, Washington Co., Virginia'],[1850,'wva','D','Washington Co. (1850 census)'],[1862,'wva','D','Marries Jane Reed; his parents are Samuel D. and Rachel (marriage record)'],[1870,'wva','D','Washington Co., with son Martin (1870 census)'],[1892,'wva','D','Dies 8 Dec 1892 (Virginia death record; trees say 1893)']]},
+ {n:'Levi Bishop',g:'bis',d:1828,s:[[1749,'salny','T','Born, Salem, Westchester Co., New York'],[1790,'wva','A','Settles in Washington Co., Virginia'],[1828,'wva','T','Dies']]},
+ {n:'John Newborough Reed',g:'bis',d:1831,s:[[1758,'lanc','T','Born, Lancaster, Pennsylvania'],[1785,'wva','A','Moves to Washington Co., Virginia'],[1831,'wva','T','Dies']]},
+ {n:'Roger Keys',g:'bis',d:1781,s:[[1718,'dg','T','Born, Dumfries and Galloway, Scotland'],[1740,'rock','A','Emigrates to Virginia'],[1781,'rock','T','Dies, Rockbridge Co.']]},
+ {n:'Sarah Adair',g:'bis',d:1781,s:[[1717,'port','T','Born, Portpatrick (tree); the attached baptism is at Drummore, 20 Jan 1717'],[1740,'rock','A','In Virginia'],[1781,'rock','T','Last record']]},
+ {n:'William Adair',g:'bis',d:1763,s:[[1689,'wig','T','Born, Wigtown (tree); the attached baptism is at Ayr, 1689'],[1735,'aug','A','Emigrates to Augusta Co., Virginia'],[1763,'aug','T','Dies']]},
+ {n:'John Orr',g:'bis',d:1748,s:[[1696,'ayr','T','Born, Ayrshire; a John Orr was baptised at West Kilbride, 6 Sep 1696'],[1730,'york','A','Emigrates to Pennsylvania'],[1748,'york','T','Dies, York']]},
+ {n:'John Courtney Mickle',g:'bis',d:1789,s:[[1705,'off','T','Born, Co. Offaly, Ireland'],[1735,'adams','A','Emigrates to Pennsylvania'],[1789,'adams','T','Dies, Adams Co.']]},
+ {n:'Mary Jane Watson',g:'bis',d:1800,s:[[1715,'mea','T','Born, Co. Meath, Ireland'],[1735,'adams','A','Emigrates to Pennsylvania'],[1800,'adams','T','Dies']]},
+ {n:'Joseph Cole',g:'bis',d:1785,s:[[1716,'swan','T','Born, Swansea, Massachusetts'],[1770,'wva','A','Moves to Washington Co., Virginia'],[1785,'wva','T','Dies']]},
+ {n:'Sabears Main',g:'bis',d:1809,s:[[1757,'ston','T','Born, Stonington, Connecticut'],[1800,'dut','Q','A “Sibbem Maine” in Dutchess Co., New York (1800 census) may be him'],[1802,'wva','A','In Washington Co., Virginia, by his daughter’s marriage'],[1809,'wva','T','Dies']]},
+
+ {n:'Candace Corine Cox',g:'cox',d:1919,s:[[1870,'jef','D','Born May 1870, Pennsylvania; Winslow, Jefferson Co. (1870 census)'],[1880,'colpa','D','Greenwood, Columbia Co. (1880 census)'],[1889,'ww','T','Marries Martin Bishop, Walla Walla'],[1900,'ww','D','Walla Walla (1900 census)'],[1910,'van','T','Vancouver, Washington'],[1919,'van','T','Dies, Vancouver']]},
+ {n:'Amanda Phoebe Burrows',g:'cox',d:1924,s:[[1833,'madny','D','Born, New York (1850 census); the tree says Madrid, St. Lawrence Co.'],[1850,'jef','D','Washington Township, Jefferson Co., Pennsylvania (1850 census)'],[1870,'jef','D','Winslow, Jefferson Co. (1870 census)'],[1880,'colpa','D','Greenwood, Columbia Co. (1880 census)'],[1900,'colpa','D','Greenwood (1900 census)'],[1910,'evt','D','Everett, Washington (1910 census)'],[1920,'colpa','D','Back in Columbia Co. (1920 census)'],[1924,'colpa','T','Dies, Benton']]},
+ {n:'Gilbert B. Burrows',g:'cox',d:1881,s:[[1798,'grot','D','Born, Connecticut (1850 census); the tree says Groton'],[1830,'madny','A','Northern New York'],[1850,'jef','D','Washington Township, Jefferson Co., Pennsylvania (1850 census)'],[1880,'jef','D','Winslow, Jefferson Co. (1880 census)'],[1881,'reyn','T','Dies, Reynoldsville, Pennsylvania']]},
+ {n:'William Cox',g:'cox',d:1836,s:[[1794,'pane','T','Born, Princess Anne Co., Virginia'],[1825,'colpa','A','Columbia Co., Pennsylvania'],[1836,'colpa','T','Dies']]},
+ {n:'John Burrows Jr.',g:'cox',d:1752,s:[[1671,'grot','T','Born, Groton, Connecticut'],[1752,'grot','T','Dies, Groton']]},
+ {n:'Elder William Brewster',g:'mfl',d:1644,s:[[1610,'lei','T','Leader of the exiled Separatists in Leiden'],[1620,'ply','T','Arrives on the Mayflower'],[1644,'ply','T','Dies, Duxbury']]},
+ {n:'Jonathan Brewster',g:'mfl',d:1659,s:[[1610,'lei','T','In Leiden with his father'],[1621,'ply','T','Follows on the Fortune'],[1649,'prc','T','Trading post on the Thames River, Connecticut'],[1659,'prc','T','Dies']]},
+ {n:'Francis Cooke',g:'mfl',d:1663,s:[[1610,'lei','T','In Leiden'],[1620,'ply','T','Arrives on the Mayflower'],[1663,'ply','T','Dies, Plymouth']]},
+ {n:'John Cooke',g:'mfl',d:1695,s:[[1611,'lei','T','A small boy in Leiden'],[1620,'ply','T','Arrives on the Mayflower, aged about 13'],[1660,'dar','A','Moves to Dartmouth'],[1695,'dar','T','Dies, one of the last surviving passengers']]},
+ {n:'Richard Warren',g:'mfl',d:1628,s:[[1610,'lon','A','In England'],[1620,'ply','T','Arrives on the Mayflower'],[1628,'ply','T','Dies, Plymouth']]},
+ {n:'Rev. Henry Whitfield',g:'mfl',d:1657,s:[[1618,'ock','T','Minister at Ockley, Surrey'],[1639,'gui','T','Leads the founding of Guilford'],[1650,'wnt','T','Returns to England'],[1657,'wnt','T','Dies, Winchester']]},
+ {n:'Rev. James Fitch',g:'mfl',d:1702,s:[[1622,'boc','T','Born, Bocking, Essex'],[1638,'hfd','T','Sails at 16; trains for the ministry at Hartford'],[1646,'say','T','First minister ordained at Saybrook'],[1660,'nrw','T','Leads the founding of Norwich'],[1702,'leb','T','Dies, Lebanon']]},
+ {n:'Samuel Fitch',g:'mfl',d:1725,s:[[1655,'say','T','Born, Saybrook'],[1660,'nrw','T','To Norwich with his father'],[1678,'prc','T','Marries Mary Brewster'],[1725,'prc','T','Dies, Preston']]},
+ {n:'Capt. James Avery',g:'mfl',d:1700,s:[[1621,'dev','T','Born, Wolborough, Devon'],[1640,'gma','A','In Gloucester'],[1651,'grot','A','Among the first settlers of New London and Groton'],[1700,'grot','T','Dies, Groton']]},
+ {n:'Hugh Cole',g:'mfl',d:1699,s:[[1628,'bns','T','Born, Barnstaple, Devon'],[1635,'ply','A','To Plymouth with his father James'],[1669,'swan','A','Settles at Swansea'],[1699,'swan','T','Dies']]},
+ {n:'Dr. Pelatiah Fitch',g:'mfl',d:1803,s:[[1722,'nrw','T','Born, Norwich'],[1773,'grot','A','Physician at Groton'],[1779,'slm','T','Settles at Salem, New York'],[1803,'slm','T','Dies, Fitch’s Point']]},
+ {n:'Richard Tyner',g:'wiv',d:1824,s:[[1775,'elb','A','Settles in what became Elbert Co.'],[1779,'wil','T','Listed in the militia at Kettle Creek'],[1784,'elb','T','Granted 200 acres'],[1820,'elb','D','Elbert Co. (1820 census)'],[1824,'elb','T','Dies; his will names Mary and Tamar']]},
+ {n:'Tamar Tyner (Mary’s sister)',g:'wiv',d:1840,s:[[1768,'wil','T','Born in the Georgia backcountry'],[1780,'cow','A','Captured with Mary (year approximate)'],[1785,'apa','A','Escapes alone by canoe (year approximate)'],[1786,'sav','A','Carried by ship to Savannah'],[1787,'elb','A','Home in Elbert Co.; marries Moses Hunt'],[1840,'elb','T','Dies, Elbert Co.']]},
+ {n:'Rev. John Jones',g:'bis',d:1836,s:[[1770,'wnc','T','Born, Wilkes Co., North Carolina (Library of Virginia; the tree says about 1782)'],[1802,'wva','T','Marries Patience Main, 18 July 1802'],[1812,'chl','T','Founds Rush Creek Primitive Baptist Church'],[1820,'wva','D','Washington Co. (1820 census)'],[1836,'wva','T','Dies, Washington Co., Virginia']]}
+];
+P.lei=[4.49,52.16,'Leiden, Holland'];
+P.lon=[-0.12,51.51,'London, England'];
+P.ply=[-70.67,41.96,'Plymouth, Massachusetts'];
+P.dar=[-70.97,41.61,'Dartmouth, Massachusetts'];
+P.prc=[-71.98,41.53,'Preston, Connecticut'];
+P.nrw=[-72.08,41.55,'Norwich, Connecticut'];
+P.say=[-72.35,41.29,'Saybrook, Connecticut'];
+P.gui=[-72.68,41.28,'Guilford, Connecticut'];
+P.ock=[-0.36,51.15,'Ockley, Surrey, England'];
+P.wnt=[-1.31,51.06,'Winchester, England'];
+P.boc=[0.55,51.88,'Bocking, Essex, England'];
+P.hfd=[-72.67,41.77,'Hartford, Connecticut'];
+P.dev=[-3.62,50.53,'Wolborough, Devon, England'];
+P.gma=[-70.66,42.61,'Gloucester, Massachusetts'];
+P.leb=[-72.21,41.64,'Lebanon, Connecticut'];
+P.cbt=[-71.97,41.7,'Canterbury, Connecticut'];
+P.slm=[-73.33,43.17,'Salem, Washington Co., New York'];
+P.bns=[-4.06,51.08,'Barnstaple, Devon, England'];
+P.wnc=[-81.15,36.15,'Wilkes Co., North Carolina'];
+P.kgm=[-81.38,35.14,'King’s Mountain, South Carolina'];
+P.cow=[-85.0,32.4,'Coweta towns, Chattahoochee River'];
+P.apa=[-84.98,29.73,'Apalachicola Bay, Florida'];
+P.sav=[-81.1,32.08,'Savannah, Georgia'];
+P.chl=[-81.62,36.8,'Chilhowie, Virginia'];
+P.bkn=[-73.97,40.66,'Brooklyn, New York'];
+
+
+P.glc=[-99.64,31.87,'Glen Cove, Coleman Co., Texas'];
+P.tal=[-99.71,31.78,'Talpa, Coleman Co., Texas'];
+P.nsh=[-86.78,36.16,'Nashville, Tennessee'];
+P.lex=[-84.50,38.04,'Lexington, Kentucky'];
+P.jef=[-78.93,41.07,'Jefferson Co., Pennsylvania'];
+P.evt=[-122.20,47.98,'Everett, Washington'];
+P.dut=[-73.68,41.45,'Frederick, Dutchess Co., New York'];
+
+const HIGHLIGHTS=[
+ {y:1958,p:'lex',t:'Bluegrass country',b:'By the late 1950s William Clinton Henderson Jr. and Doreen had moved from Nashville to Lexington, Kentucky, and in 1960 they went on to Missouri. Lexington is Daniel Boone country. Fort Boonesborough, which he founded in 1775, is about twenty miles away. Boone was working for the Transylvania Company of Richard Henderson, a North Carolina judge with no known link to this family. A famous Henderson beside a famous frontiersman could easily get tangled into a family story.'},
+ {y:1914,p:'glc',t:'Dry land at Glen Cove',b:'Robert P. Henderson bought 160 acres near Glen Cove, in the dry country west of Coleman, in 1904, mostly on credit. The lenders took it back. In January 1914 his wife Roberta and their sons Robert and William Clinton bought it again in their own names.'},
+
+ {y:1700,p:'kq',t:'Tobacco country',b:'William Henderson was born about 1700 in King and Queen County, on the York River. This was Virginia’s Tidewater, where tobacco was grown on plantations worked by enslaved people. Within a generation the family moved upriver to the new Piedmont frontier, as younger sons usually did once the coastal land was taken.'},
+ {y:1738,p:'aug',t:'The Great Wagon Road',b:'In the 1730s and 1740s thousands of Scots-Irish families landed at Philadelphia and travelled south down the Great Wagon Road into Virginia’s Shenandoah Valley. The Keys, Adair, Orr and Mickle ancestors came from Dumfriesshire, Wigtownshire, Ayrshire and the Irish midlands. Augusta County, created in 1738, was their frontier.'},
+ {y:1749,p:'cul',t:'A teenage surveyor',b:'In 1749 a 17-year-old George Washington was appointed surveyor of the newly formed Culpeper County. It was his first public office. The Hendersons were already there: John Henderson’s son Joseph, a direct ancestor, was born at Stevensburg in 1745.'},
+ {y:1760,p:'sd',t:'A Frenchman from San Domingo?',b:'One note in an online tree says Nancy Manack’s father, “French John” Manack, came “from San Domingo”. In the 1700s that usually meant Saint-Domingue, France’s sugar colony and the richest in the Caribbean, which became Haiti in 1804. He was later called a “French Indian trader” in Georgia. It is an intriguing story but unproven, so the map draws it as a dotted line.'},
+ {y:1773,p:'wil',t:'The New Purchase',b:'In 1773, under the Treaty of Augusta, the Creek and Cherokee gave up a large tract of the Georgia backcountry to pay traders’ debts. Settlers rushed in. The land became Wilkes County in 1777, and Elbert County was split from it in 1790. Nancy Manack was born there in 1787.'},
+ {y:1779,p:'wil',t:'Kettle Creek and the Tyner sisters',b:'In February 1779 Patriot militia defeated a Loyalist force at Kettle Creek in Wilkes County. The Georgia backcountry spent the Revolution in a bitter civil war of raids and reprisals. Richard Tyner, a direct ancestor, is listed among the Wilkes County militia there. A Georgia history of 1854 says a Creek party attacked his cabin while he was away, killed his wife and youngest child, and took his daughters Mary and Tamar to the Coweta towns. The trader John Manack bought Mary’s freedom and married her; they were Nancy Manack’s parents. Richard’s later claims against the Creeks list two burnt houses.'},
+ {y:1788,p:'elb',t:'Virginians on the Broad River',b:'After the Revolution, Georgia offered land to settlers and veterans, and whole Virginia neighbourhoods moved to the Broad River valley. Joseph and Mary (Alexander) Henderson came from Culpeper about this time. Elbert County became cotton country, worked by enslaved people. The Hendersons were slaveholders, and Simeon’s will names people they enslaved.'},
+ {y:1813,p:'elb',t:'The War of 1812',b:'Simeon Henderson, a direct ancestor, appears in the index to War of 1812 service records. Georgia’s militia was called out against the British and against the Red Stick Creeks in 1813–14. In 1819 he bought his brothers’ and sisters’ shares of their father’s land on Van’s Creek.'},
+ {y:1841,p:'msh',t:'Land taken from the Chickasaw',b:'In 1832 the Treaty of Pontotoc Creek forced the Chickasaw Nation to give up its homeland in northern Mississippi. The Chickasaw were removed west to Indian Territory, and their land was sold to settlers. Marshall County was created from it in 1836. Simeon’s widow Nancy had moved there by 1841, and young Thomas B. probably went with her. His 1913 Texas death record gives his birthplace as Mississippi, though most of his censuses say Georgia.'},
+ {y:1850,p:'hou',t:'Gone to Texas',b:'Texas joined the United States in December 1845. Thomas B. Henderson and Sarah Honnoll married in Tennessee in 1846, had a son in Mississippi in 1847 and another in Harrison County, Texas, in 1849, and settled in Houston County by 1850. Sarah’s widowed mother and sister lived four doors away. The county seat, Crockett, was named for Davy Crockett, who by local tradition camped there on his way to the Alamo in 1836. That may be where a family story about Davy Crockett began.'},
+ {y:1862,p:'hou',t:'Gould’s Battalion',b:'In May 1862 the 6th Battalion Texas Cavalry (Gould’s) was organised at Porter Springs in Houston County. Thomas B. Henderson enlisted in Company C as a private and rose to corporal. Texas mounted soldiers were often remembered as “rangers”, which may be the seed of the family’s Texas Ranger story. On 19 June 1865 emancipation was proclaimed in Texas, the day now marked as Juneteenth.'},
+ {y:1883,p:'den',t:'Leaving Denmark',b:'Fred Peterson was born in Denmark in 1861. Denmark lost Schleswig to Prussia in 1864, and hard times on the land followed. Hundreds of thousands of Danes emigrated to America in the following decades. The 1900 census says Fred came in 1883. He settled in Herkimer County, New York, and married Rose Hierhoer; their son Frank was born in 1887.'},
+ {y:1889,p:'ww',t:'Washington becomes a state',b:'Martin Van Buren Bishop, from the hills of southwest Virginia, married Candace Cox, from Pennsylvania, at Walla Walla in August 1889. Three months later Washington Territory became the 42nd state. Their daughter Mary Audrey, a direct ancestor, was born there in 1898.'},
+ {y:1917,p:'waco',t:'The Great War draft',b:'William Clinton Henderson Sr., a direct ancestor, registered for the draft in 1917–18, aged about 27, while living in central Texas. He married Mabel Ann Worden, and their son William Jr. was born in Waco in 1923.'},
+ {y:1923,p:'okm',t:'Oil boom town',b:'Okmulgee is the capital of the Muscogee (Creek) Nation, and it became an oil boom town after strikes from about 1907. Frank and Audrey Peterson arrived by 1923, after stops in Washington and Missouri. Frank sold furniture there for nearly 30 years, and their daughter Doreen was born there about 1928. The records show the family were newcomers, not Creek.'},
+ {y:1620,p:'ply',t:'The Mayflower',b:'In November 1620 the Mayflower reached Cape Cod with 102 passengers. Five were direct ancestors: Elder William Brewster, the Pilgrims’ religious leader, and his wife Mary; Francis Cooke and his son John, about 13; and Richard Warren. Half the company died the first winter. All five of them survived it. They connect through two separate branches of the Bishop and Cox family.'},
+ {y:1639,p:'gui',t:'The stone house at Guilford',b:'Rev. Henry Whitfield brought a shipload of families from Surrey and Kent and founded Guilford, Connecticut, in 1639. His stone house, built to double as a fort, is the oldest house in Connecticut and is now a museum. His grandson Samuel Fitch married Mary Brewster, joining this line to the Mayflower.'},
+ {y:1656,p:'grot',t:'The Averys of Groton',b:'Capt. James Avery built the family’s long-lived house at Groton about 1656. It stood until 1894. His descendants include John D. Rockefeller, born in 1839, who was a sixth cousin of Amanda Burrows, born in 1833.'},
+ {y:1675,p:'swan',t:'King Philip’s War',b:'In June 1675 war broke out at Swansea between the colonists and the Wampanoag under Metacom, called King Philip. Hugh Cole lived there. An old story says Metacom set free two of Cole’s captured sons because their father had always been his friend, though no record of it has been found. At Norwich, Rev. James Fitch negotiated with the Mohegans, who sided with the colonists.'},
+ {y:1701,p:'cbt',t:'First land for Yale',b:'In October 1701 Major James Fitch gave a farm of 637 acres to the new Collegiate School of Connecticut. The school was later renamed Yale. He was the brother of Samuel Fitch.'},
+ {y:1776,p:'bkn',t:'A prisoner’s diary',b:'Lt. Jabez Fitch, brother of Dr. Pelatiah Fitch, was captured at the Battle of Long Island on 27 August 1776. He was held for over fifteen months, at first on a prison ship. His diary survives in the New York Public Library. Pelatiah’s son Asa became a US Congressman, and his grandson Asa was the first professional entomologist in the United States.'},
+ {y:1777,p:'ston',t:'A spy for Putnam',b:'Sabeers Main of Stonington, a direct ancestor, served in the Revolution. An 1880 county history says he was a spy for General Israel Putnam, often slipping through British lines. He later moved to Washington County, Virginia, where the Mains, Coles, Joneses and Bishops became one family.'},
+ {y:1780,p:'kgm',t:'King’s Mountain',b:'On 7 October 1780 frontier militia from over the mountains destroyed a Loyalist army at King’s Mountain. Levi Bishop of Washington County, Virginia, is listed among them. He is probably a direct ancestor, though a generation may be missing in the tree.'},
+ {y:1785,p:'apa',t:'Tamar’s escape',b:'Mary Tyner’s captors sold her to John Manack, but refused to part with her sister Tamar. An elderly Creek woman warned Tamar that she was to be killed, and gave her food and a canoe. Tamar paddled down the Chattahoochee by night and hid in the swamps by day until she reached Apalachicola Bay. A ship took her to Savannah, and she got home to Elbert County and married. The year isn’t recorded. The story was printed in 1854.'},
+ {y:1812,p:'chl',t:'A church on Rush Creek',b:'In 1812 a direct ancestor, Rev. John Jones, founded Rush Creek Primitive Baptist Church near Chilhowie, Virginia. Four years earlier he had paid a printer in Abingdon to publish a book of sermons on baptism, which earned him an entry in the Library of Virginia’s index of early printing.'}
+];
+
+const CIT={"William Henderson":{"r":{}},"John Henderson":{"p":"https://ancestors.familysearch.org/en/PQYF-C42","r":{}},"Joseph Henderson":{"p":"https://ancestors.familysearch.org/en/L7BT-92Z","r":{"1816":"https://www.familysearch.org/ark:/61903/3:1:3Q9M-CSKK-JQGW-C"}},"Simeon Henderson":{"p":"https://ancestors.familysearch.org/en/P7BR-VZ2","r":{"1819":"https://www.familysearch.org/ark:/61903/3:1:3Q9M-CSKK-JQGW-C","1830":"https://www.familysearch.org/ark:/61903/3:1:3QS7-8935-V9SN-3"}},"Thomas Banks Henderson":{"p":"https://ancestors.familysearch.org/en/KHJ8-3YW","r":{"1827":"https://www.familysearch.org/ark:/61903/3:1:3QS7-8935-V9SN-3","1846":"~KZWP-DBX","1847":"~MXL2-2W7","1849":"~MXL2-2W7","1850":"~MXL2-2W7","1862":"~F92M-CNY","1870":"~MXGM-M6C","1880":"~MFNL-NRT","1913":"~K3W9-CLM"}},"Robert P. Henderson":{"p":"https://ancestors.familysearch.org/en/KD39-8HS","r":{"1854":"~MXGM-HWP","1870":"~MXGM-HWP","1900":"~M3LH-2Y5","1904":"https://www.familysearch.org/ark:/61903/3:1:3QSQ-G9QJ-D93S-F","1910":"~M2MX-G66"}},"William Clinton Henderson Sr.":{"p":"https://ancestors.familysearch.org/en/GQZ2-VXZ","r":{"1890":"~KZF9-WRW","1910":"~M2MX-G6J","1914":"https://www.familysearch.org/ark:/61903/3:1:3QS7-99QJ-FJ57","1917":"~KZF9-WRW","1923":"~6KW3-46XQ","1930":"~HXN8-9MM","1950":"~6XP4-RR7S"}},"William Clinton Henderson Jr.":{"p":"https://ancestors.familysearch.org/en/G51Y-CKK","r":{"1923":"~6KW3-46XQ","1930":"~HXN8-ZT2","1995":"~VZ41-N5R"}},"Mary Woolfolk":{"r":{}},"Ann Thompson":{"p":"https://ancestors.familysearch.org/en/G3JT-5ND","r":{}},"William Phillips":{"p":"https://ancestors.familysearch.org/en/LKJM-4HL","r":{"1655":"~J3MC-YY7"}},"Mary Alexander":{"p":"https://ancestors.familysearch.org/en/9F3H-SCQ","r":{}},"\"French John\" Manack":{"p":"https://ancestors.familysearch.org/en/G6DK-D5F","r":{}},"Mary Tyner":{"p":"https://ancestors.familysearch.org/en/LH23-MH2","r":{"1780":"https://archive.org/details/historicalcolle00duttgoog"}},"Nancy Manack":{"p":"https://ancestors.familysearch.org/en/L7G7-KQC","r":{"1830":"https://www.familysearch.org/ark:/61903/3:1:3QS7-8935-V9SN-3","1841":"~V289-9VV"}},"William Honnell":{"r":{"1827":"~QKZS-L9KH","1831":"https://web.archive.org/web/20240523235837/https://woodvorwerk.com/wood/g4/p4928.htm"}},"Nancy Adams":{"r":{"1827":"~QKZS-L9KH","1836":"~QKZS-L9NN"}},"Sarah J. C. Honnoll":{"p":"https://ancestors.familysearch.org/en/KCRB-3N6","r":{"1828":"https://web.archive.org/web/20240523235837/https://woodvorwerk.com/wood/g4/p4928.htm","1846":"~KZWP-DBX","1847":"~MXL2-2WW","1849":"~MXL2-2WW","1850":"~MXL2-2WW","1860":"~MXFN-GZX","1867":"~MXGM-M6C"}},"Roberta R. Farrell":{"p":"https://ancestors.familysearch.org/en/KZJG-WN6","r":{"1861":"~MFNL-JD3","1880":"~MFNL-JD3","1910":"~M2MX-G6X","1935":"~K4S3-T6G","1940":"~K4S3-T6G"}},"William L. Worden":{"p":"https://ancestors.familysearch.org/en/GWQW-68Q","r":{"1854":"~M3PF-MD6","1900":"~M3PF-MD6","1910":"~M23K-3Y7"}},"Sarah J. Cook":{"p":"https://ancestors.familysearch.org/en/GWQW-HLG","r":{"1852":"~M3PF-MDX","1900":"~M3PF-MDX","1910":"~M23K-3YW"}},"Mabel Ann Worden":{"p":"https://ancestors.familysearch.org/en/GQZ2-7YN","r":{"1892":"~M3PF-MDJ","1900":"~M3PF-MDJ","1910":"~M23K-3YC","1930":"~HXN8-3W2","1950":"~6XP4-RR7M","1964":"~KSBH-CQ4"}},"Fred Peterson":{"p":"https://ancestors.familysearch.org/en/PHZ8-CJ6","r":{"1861":"~MSF9-47F","1883":"~MSF9-47F","1900":"~MSF9-47F"}},"Rosa Hierhoer":{"p":"https://ancestors.familysearch.org/en/PHZ8-CJX","r":{"1864":"~MSF9-47N","1900":"~MSF9-47N"}},"Frank H. Peterson":{"p":"https://ancestors.familysearch.org/en/G8WY-WJ4","r":{"1887":"~MSF9-47J","1900":"~MSF9-47J","1920":"~M8HW-78S","1930":"~XCWY-ZQ1","1940":"~VBK3-1FF","1950":"~6FSK-JNFV"}},"Doreen L. Peterson":{"r":{"1928":"~XCWY-Z73","1930":"~XCWY-Z73","1940":"~VBK3-1FK"}},"Mary Audrey Bishop":{"p":"https://ancestors.familysearch.org/en/G9FB-PFF","r":{"1898":"~MM5M-H3X","1910":"~MGV9-YS7","1920":"~M8HW-783","1930":"~XCWY-Z7M","1950":"~6FSK-JNFJ"}},"Martin Van Buren Bishop":{"p":"https://ancestors.familysearch.org/en/L6RV-K8J","r":{"1866":"~MFG6-CPW","1880":"~MCRD-MF5","1900":"~MM5M-QNV","1910":"~MGV9-YSM","1920":"~M4Z1-9MX"}},"Madison Tilson Bishop":{"p":"https://ancestors.familysearch.org/en/LH56-7YJ","r":{"1850":"~M8DT-T41","1862":"~D9GX-RM6Z","1870":"~MFG6-CPM","1892":"~XRQM-WZ6"}},"Levi Bishop":{"p":"https://ancestors.familysearch.org/en/LZY3-H9Y","r":{"1749":"https://www.wikitree.com/wiki/Bishop-13047"}},"John Newborough Reed":{"p":"https://ancestors.familysearch.org/en/9HQ2-BFJ","r":{}},"Roger Keys":{"p":"https://ancestors.familysearch.org/en/LVWC-RJD","r":{}},"Sarah Adair":{"p":"https://ancestors.familysearch.org/en/KVRH-JN9","r":{"1717":"~VQHX-TYL"}},"William Adair":{"p":"https://ancestors.familysearch.org/en/KZZX-64F","r":{"1689":"~XTV7-2XP"}},"John Orr":{"p":"https://ancestors.familysearch.org/en/L6LG-K61","r":{"1696":"~XTKP-HSW"}},"John Courtney Mickle":{"p":"https://ancestors.familysearch.org/en/L56Z-31W","r":{}},"Mary Jane Watson":{"p":"https://ancestors.familysearch.org/en/GL7K-8ZH","r":{}},"Joseph Cole":{"p":"https://ancestors.familysearch.org/en/L183-JPT","r":{}},"Sabears Main":{"p":"https://ancestors.familysearch.org/en/LH77-5WK","r":{"1757":"https://www.wikitree.com/wiki/Maine-878","1800":"~XH5T-4ZD","1802":"~XRDR-KXT"}},"Candace Corine Cox":{"p":"https://ancestors.familysearch.org/en/KD9H-GTM","r":{"1870":"~MZPD-HF1","1880":"~MWXR-57X","1900":"~MM5M-QNK"}},"Amanda Phoebe Burrows":{"p":"https://ancestors.familysearch.org/en/LHP6-2Q3","r":{"1833":"~M4HK-VBQ","1850":"~M4HK-VBQ","1870":"~MZPD-HFL","1880":"~MWXR-57C","1900":"~M39Y-Y8C","1910":"~MGVW-6QB","1920":"~M61J-2YV"}},"Gilbert B. Burrows":{"p":"https://ancestors.familysearch.org/en/LZ6H-KSL","r":{"1798":"~M4HK-VBM","1850":"~M4HK-VBM","1880":"~MWF2-64Z"}},"William Cox":{"p":"https://ancestors.familysearch.org/en/LYFR-T62","r":{}},"John Burrows Jr.":{"p":"https://ancestors.familysearch.org/en/KNZC-T9T","r":{}},"Elder William Brewster":{"p":"https://en.wikipedia.org/wiki/William_Brewster_(Mayflower_passenger)","r":{}},"Jonathan Brewster":{"p":"https://en.wikipedia.org/wiki/Jonathan_Brewster_(colonist)","r":{}},"Francis Cooke":{"p":"https://en.wikipedia.org/wiki/Francis_Cooke","r":{}},"John Cooke":{"p":"https://en.wikipedia.org/wiki/Francis_Cooke","r":{}},"Richard Warren":{"p":"https://en.wikipedia.org/wiki/Richard_Warren","r":{}},"Rev. Henry Whitfield":{"p":"https://en.wikipedia.org/wiki/Henry_Whitfield_House","r":{}},"Rev. James Fitch":{"p":"https://en.wikipedia.org/wiki/James_Fitch_(minister)","r":{}},"Samuel Fitch":{"p":"https://mathcs.clarku.edu/~djoyce/gen/report/rr05/rr05_456.html","r":{}},"Capt. James Avery":{"p":"https://www.archive.org/details/grotonaveryclan12aver","r":{}},"Hugh Cole":{"r":{}},"Dr. Pelatiah Fitch":{"p":"https://www.wikitree.com/wiki/Fitch-1871","r":{}},"Richard Tyner":{"p":"https://ancestors.familysearch.org/en/L61F-JZ9","r":{"1775":"https://www.wikitree.com/wiki/Tyner-39","1820":"~XHLW-67R"}},"Tamar Tyner (Mary’s sister)":{"p":"https://www.wikitree.com/wiki/Tyner-39","r":{"1780":"https://archive.org/details/historicalcolle00duttgoog"}},"Rev. John Jones":{"p":"https://ancestors.familysearch.org/en/G4YN-6LG","r":{"1770":"https://www.lva.virginia.gov/collections/virginia-print/bios/240","1802":"~XRDR-KXT","1820":"~XHLJ-P79"}}};
+const SRC={"A Frenchman from San Domingo?":[["His FamilySearch page","https://ancestors.familysearch.org/en/G6DK-D5F"],["White 1854, p. 440","https://archive.org/details/historicalcolle00duttgoog"]],"Kettle Creek and the Tyner sisters":[["White 1854, p. 440","https://archive.org/details/historicalcolle00duttgoog"],["Richard Tyner on WikiTree","https://www.wikitree.com/wiki/Tyner-39"]],"Tamar’s escape":[["White 1854, p. 440","https://archive.org/details/historicalcolle00duttgoog"]],"Virginians on the Broad River":[["1819 heirs’ deed","https://www.familysearch.org/ark:/61903/3:1:3Q9M-CSKK-JQGW-C"],["Simeon’s will","https://www.familysearch.org/ark:/61903/3:1:3QS7-8935-V9SN-3"]],"The War of 1812":[["Service index","https://www.familysearch.org/ark:/61903/1:1:Q29K-CSLG"],["1819 deed","https://www.familysearch.org/ark:/61903/3:1:3Q9M-CSKK-JQGW-C"]],"Land taken from the Chickasaw":[["Treaty of Pontotoc Creek","https://en.wikipedia.org/wiki/Treaty_of_Pontotoc_Creek"],["Nancy’s 1841 marriage","https://www.familysearch.org/ark:/61903/1:1:V289-9VV"],["Thomas’s death record","https://www.familysearch.org/ark:/61903/1:1:K3W9-CLM"]],"Gone to Texas":[["1850 census","https://www.familysearch.org/ark:/61903/1:1:MXL2-2W7"],["1846 marriage","https://www.familysearch.org/ark:/61903/1:1:KZWP-DBX"],["Handbook of Texas: Crockett","https://www.tshaonline.org/handbook/entries/crockett-tx"]],"Gould’s Battalion":[["Confederate service index","https://www.familysearch.org/ark:/61903/1:1:F92M-CNY"],["Texas State Library","https://www.tsl.texas.gov/historicflags/4040Gould.html"]],"Leaving Denmark":[["1900 census","https://www.familysearch.org/ark:/61903/1:1:MSF9-47F"]],"Washington becomes a state":[["1900 census","https://www.familysearch.org/ark:/61903/1:1:MM5M-QNV"],["Mary Audrey, 1900","https://www.familysearch.org/ark:/61903/1:1:MM5M-H3X"]],"The Great War draft":[["Draft card","https://www.familysearch.org/ark:/61903/1:1:KZF9-WRW"]],"Oil boom town":[["1920 census","https://www.familysearch.org/ark:/61903/1:1:M8HW-78S"],["1930 census","https://www.familysearch.org/ark:/61903/1:1:XCWY-Z73"],["1950 census","https://www.familysearch.org/ark:/61903/1:1:6FSK-JNFV"]],"Bluegrass country":[["Fort Boonesborough","https://en.wikipedia.org/wiki/Fort_Boonesborough_State_Park"],["Richard Henderson","https://en.wikipedia.org/wiki/Richard_Henderson_(jurist)"]],"Dry land at Glen Cove":[["1904 deed","https://www.familysearch.org/ark:/61903/3:1:3QSQ-G9QJ-D93S-F"],["1910 census","https://www.familysearch.org/ark:/61903/1:1:M2MX-G66"],["1914 deed","https://www.familysearch.org/ark:/61903/3:1:3QS7-99QJ-FJ57"]],"The Mayflower":[["William Brewster","https://en.wikipedia.org/wiki/William_Brewster_(Mayflower_passenger)"],["Francis Cooke","https://en.wikipedia.org/wiki/Francis_Cooke"],["Richard Warren","https://en.wikipedia.org/wiki/Richard_Warren"],["Brewster–Fitch link","https://mathcs.clarku.edu/~djoyce/gen/report/rr05/rr05_456.html"]],"The stone house at Guilford":[["Henry Whitfield House","https://en.wikipedia.org/wiki/Henry_Whitfield_House"]],"The Averys of Groton":[["Groton Avery Clan","https://www.archive.org/details/grotonaveryclan12aver"]],"King Philip’s War":[["King Philip’s War","https://en.wikipedia.org/wiki/King_Philip%27s_War"],["Rev. James Fitch","https://en.wikipedia.org/wiki/James_Fitch_(minister)"]],"First land for Yale":[["Yale Alumni Magazine","https://www.yalealumnimagazine.com/articles/4048-the-invention-of-the-alumni-fund"]],"A prisoner’s diary":[["Diary at NYPL","https://archives.nypl.org/mss/1016"],["Jabez Fitch on WikiTree","https://www.wikitree.com/wiki/Fitch-1871"],["Asa Fitch","https://en.wikipedia.org/wiki/Asa_Fitch"]],"A spy for Putnam":[["Sabeers Main on WikiTree","https://www.wikitree.com/wiki/Maine-878"]],"King’s Mountain":[["Levi Bishop on WikiTree","https://www.wikitree.com/wiki/Bishop-13047"]],"A church on Rush Creek":[["Library of Virginia","https://www.lva.virginia.gov/collections/virginia-print/bios/240"]]};
+const ARK='https://www.familysearch.org/ark:/61903/1:1:';
+const esc=u=>u.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+
+const W=1000,H=620, Y0=1610, Y1=2000;
+const svg=d3.select('#map');
+const proj=d3.geoNaturalEarth1().rotate([52,0]).fitExtent([[14,14],[W-14,H-14]],{type:'MultiPoint',coordinates:[[-127,15],[22,63],[-127,63],[22,15]]});
+const path=d3.geoPath(proj);
+const root=svg.append('g');
+root.append('path').attr('d',path({type:'Sphere'})).attr('fill','var(--ocean)');
+root.append('path').attr('d',path(d3.geoGraticule10())).attr('fill','none').attr('stroke','var(--border)').attr('stroke-opacity',.25).attr('stroke-width',.5).attr('vector-effect','non-scaling-stroke');
+const landG=root.append('g'), stateG=root.append('g');
+const trailG=root.append('g'), hlG=root.append('g'), dotG=root.append('g'), labG=root.append('g');
+const hidden=new Set();
+
+function curve(a,b){const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2,dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1;const k=Math.min(.22,40/L+.08);const c=[mx-dy*k,my+dx*k];const pts=[];for(let i=0;i<=24;i++){const t=i/24,u=1-t;pts.push([u*u*a[0]+2*u*t*c[0]+t*t*b[0],u*u*a[1]+2*u*t*c[1]+t*t*b[1]]);}return pts;}
+T.forEach((t,i)=>{
+  t.id='t'+i; t.pts=t.s.map(s=>proj([P[s[1]][0],P[s[1]][1]]));
+  t.segs=[]; for(let k=0;k<t.s.length-1;k++){t.segs.push({pts:curve(t.pts[k],t.pts[k+1]),conf:t.s[k+1][2]});}
+  t.start=t.s[0][0]; t.end=t.d??t.s[t.s.length-1][0];
+  const g=trailG.append('g');
+  t.segEls=t.segs.map(sg=>g.append('path').attr('fill','none').attr('stroke',`var(${G[t.g][1]})`).attr('vector-effect','non-scaling-stroke')
+     .attr('stroke-width',sg.conf==='D'?2.4:sg.conf==='T'?1.3:1.5).attr('stroke-dasharray',sg.conf==='A'?'5 3':sg.conf==='Q'?'1.5 3':null).attr('stroke-linecap','round'));
+  t.dot=dotG.append('circle').attr('fill',`var(${G[t.g][1]})`).attr('stroke','var(--ocean)').attr('stroke-width',1).attr('vector-effect','non-scaling-stroke');
+  t.lab=labG.append('text').attr('fill','var(--ink)').attr('font-family','IBM Plex Sans, system-ui, sans-serif').attr('paint-order','stroke').attr('stroke','var(--ocean)').attr('stroke-linejoin','round').text(t.n);
+});
+const lineFn=d3.line();
+
+// highlights
+const HL=(typeof HIGHLIGHTS!=='undefined'?HIGHLIGHTS:[]).filter(h=>P[h.p]).sort((a,b)=>a.y-b.y);
+HL.forEach(h=>{h.pt=proj([P[h.p][0],P[h.p][1]]);});
+const ring=hlG.append('circle').attr('fill','none').attr('stroke','var(--hl)').attr('stroke-width',2).attr('vector-effect','non-scaling-stroke').attr('opacity',0);
+const ring2=hlG.append('circle').attr('fill','var(--hl)').attr('opacity',0);
+const card=document.getElementById('hl'), hlY=document.getElementById('hlYear'), hlT=document.getElementById('hlTitle'), hlB=document.getElementById('hlBody'), hlP=document.getElementById('hlPlace'), hlGo=document.getElementById('hlGo'), hlN=document.getElementById('hlNum');
+const pauseBox=document.getElementById('pauseHL');
+let activeHL=null, resumeAfter=false, cooldownUntil=0; const pending=[];
+function showHL(h,resume){activeHL=h; resumeAfter=!!resume; hlY.textContent=h.y; hlT.textContent=h.t; hlB.textContent=h.b; document.getElementById('hlSrc').innerHTML=(SRC[h.t]||[]).map(([l,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${l}</a>`).join(''); hlP.textContent=P[h.p][2]; hlN.textContent=`Story ${HL.indexOf(h)+1} of ${HL.length}`; hlGo.textContent=resume?'Continue':'Close'; card.hidden=false; hlGo.focus({preventScroll:true});}
+function hideHL(){const r=resumeAfter; activeHL=null; card.hidden=true; ring.attr('opacity',0); ring2.attr('opacity',0); if(r){playing=true; playBtn.textContent='Pause'; last=performance.now(); cooldownUntil=performance.now()+3500;}}
+hlGo.addEventListener('click',hideHL);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&activeHL) hideHL();});
+
+// events
+const EV=[];T.forEach(t=>t.s.forEach(s=>{if(s[3])EV.push({y:s[0],t,place:P[s[1]][2],note:s[3]})}));
+HL.forEach(h=>EV.push({y:h.y,h}));
+EV.sort((a,b)=>a.y-b.y||(a.h?-1:1));
+const log=document.getElementById('log');
+EV.forEach(e=>{const w=document.createElement('div');w.className='ev';const b=document.createElement('button');b.type='button';
+  if(e.h){w.classList.add('star');b.innerHTML=`<span class="y">${e.y}</span><span><span class="who">★ ${e.h.t}</span> <span style="color:var(--muted)">${P[e.h.p][2]}</span></span>`;b.addEventListener('click',()=>{playing=false;playBtn.textContent='Play';setYear(e.y);showHL(e.h,false);});}
+  else{b.innerHTML=`<span class="y">${e.y}</span><span><span class="who" style="color:var(${G[e.t.g][1]})">${e.t.n}</span>: ${e.note}. <span style="color:var(--muted)">${e.place}</span></span>`;b.addEventListener('click',()=>{setYear(e.y+0.05);});}
+  w.appendChild(b);
+  if(!e.h){const c=CIT[e.t.n]||{},r=c.r&&c.r[e.y],u=r?r.replace('~',ARK):c.p;if(u){const a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';a.className='cite'+(r?' rec':'');a.textContent=r?'record':(/familysearch/.test(u)?'tree':'page');a.setAttribute('aria-label',(r?'Record for ':'Page for ')+e.t.n+', '+e.y);w.appendChild(a);}}
+  e.el=w;log.appendChild(w);});
+
+// chips
+const chips=document.getElementById('chips');
+Object.entries(G).forEach(([k,[name,c,desc]])=>{const l=document.createElement('label');l.className='chip';l.innerHTML=`<input type="checkbox" id="g-${k}" checked><span class="sw" style="background:var(${c})"></span><span><span class="cn">${name}</span>${desc?`<span class="cd">${desc}</span>`:''}</span>`;l.querySelector('input').addEventListener('change',ev=>{ev.target.checked?hidden.delete(k):hidden.add(k);draw(Y,true);});chips.appendChild(l);});
+
+let Y=Y1, playing=false, speed=3, vb=[0,0,W,H], last=performance.now();
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const yearBig=document.getElementById('yearBig'), cap=document.getElementById('caption'), scrub=document.getElementById('scrub'), playBtn=document.getElementById('play');
+
+function posAt(t,y){const s=t.s; let i=0; while(i<s.length-1 && s[i+1][0]<=y) i++;
+  if(i<s.length-1){const ny=s[i+1][0], dur=Math.min(4,ny-s[i][0]), t0=ny-dur; const f=y>=t0?(y-t0)/dur:0; return {i,f};} return {i:s.length-1,f:0};}
+function partial(pts,f){const n=Math.max(1,Math.round(f*(pts.length-1)));return pts.slice(0,n+1);}
+let lastActive=null;
+function draw(y,snap,now){
+  const active=[]; const k=vb[2]/W;
+  T.forEach(t=>{
+    const vis=!hidden.has(t.g) && y>=t.start;
+    if(!vis){t.segEls.forEach(e=>e.attr('d',null));t.dot.attr('r',0);t.lab.attr('opacity',0);return;}
+    const {i,f}=posAt(t,y); const alive=y<=t.end+0.5;
+    t.segEls.forEach((e,j)=>{ if(j<i) e.attr('d',lineFn(t.segs[j].pts)); else if(j===i && f>0) e.attr('d',lineFn(partial(t.segs[j].pts,f))); else e.attr('d',null); e.attr('stroke-opacity',alive?.95:.28); });
+    const p=(i<t.segs.length && f>0) ? t.segs[i].pts[Math.round(f*(t.segs[i].pts.length-1))] : t.pts[i];
+    if(alive){t.dot.attr('cx',p[0]).attr('cy',p[1]).attr('r',3.6*k);active.push(p);} else t.dot.attr('r',0);
+    const recent=t.s.some(s=>y>=s[0]-0.2 && y<s[0]+2.2) || (f>0&&f<1);
+    t.lab.attr('x',p[0]+6*k).attr('y',p[1]-6*k).attr('font-size',11*k).attr('stroke-width',3*k).attr('opacity',alive&&recent?1:0);
+  });
+  let tgt=[0,0,W,H];
+  const fit=(pts,minW)=>{let x0=d3.min(pts,p=>p[0]),x1=d3.max(pts,p=>p[0]),y0=d3.min(pts,p=>p[1]),y1=d3.max(pts,p=>p[1]);
+    let w=Math.max(x1-x0+140,minW),h=Math.max(y1-y0+120,minW*H/W); if(w/h>W/H) h=w*H/W; else w=h*W/H; w=Math.min(w,W);h=Math.min(h,H);
+    const cx=(x0+x1)/2, cy=(y0+y1)/2; return [Math.max(0,Math.min(W-w,cx-w/2)),Math.max(0,Math.min(H-h,cy-h/2)),w,h];};
+  if(activeHL){ tgt=fit([activeHL.pt],300); }
+  else if(active.length && y<Y1-1){ tgt=fit(active,220); }
+  const a=(snap||reduce)?1:0.03;
+  vb=vb.map((v,j)=>v+(tgt[j]-v)*a);
+  svg.attr('viewBox',vb.join(' '));
+  if(activeHL){const ph=((now||0)%1600)/1600; ring.attr('cx',activeHL.pt[0]).attr('cy',activeHL.pt[1]).attr('r',(6+18*ph)*k).attr('opacity',1-ph); ring2.attr('cx',activeHL.pt[0]).attr('cy',activeHL.pt[1]).attr('r',4*k).attr('opacity',.9);}
+  yearBig.textContent=Math.floor(y);
+  let cur=null; for(const e of EV){ if(e.h||hidden.has(e.t.g)) continue; if(e.y<=y && e.y>y-2.5) cur=e; }
+  if(y<Y1-1){ if(cur){cap.hidden=false;cap.innerHTML=`<b>${cur.y}</b><span style="color:var(${G[cur.t.g][1]});font-weight:600">${cur.t.n}</span>: ${cur.note}. <span style="color:var(--muted)">${cur.place}</span>`;} else cap.hidden=true; }
+  let lastOn=null; EV.forEach(e=>{const on=e.h?(activeHL===e.h):(!hidden.has(e.t.g)&&e.y<=y&&e.y>y-2.5); e.el.classList.toggle('on',on); if(!e.h){e.el.style.borderLeftColor=on?`var(${G[e.t.g][1]})`:'transparent'; e.el.hidden=hidden.has(e.t.g);} if(on) lastOn=e;});
+  if(lastOn && lastOn!==lastActive && (playing||activeHL)){ log.scrollTop=Math.max(0,lastOn.el.offsetTop-log.offsetTop-log.clientHeight/2); lastActive=lastOn; }
+}
+function setYear(y){Y=Math.max(Y0,Math.min(Y1,y));scrub.value=Y;draw(Y,false,performance.now());}
+scrub.addEventListener('input',()=>{pending.length=0; if(activeHL){activeHL=null;card.hidden=true;ring.attr('opacity',0);ring2.attr('opacity',0);} Y=+scrub.value;draw(Y,false,performance.now());});
+document.getElementById('speed').addEventListener('change',e=>speed=+e.target.value);
+playBtn.addEventListener('click',()=>{ if(activeHL){hideHL(); if(!playing){playing=true;playBtn.textContent='Pause';last=performance.now();} return;}
+  if(!playing){ if(Y>=Y1-0.5){Y=Y0;vb=[0,0,W,H];pending.length=0;} playing=true; playBtn.textContent='Pause'; last=performance.now(); } else {playing=false; playBtn.textContent='Play';} });
+function tick(now){const dt=Math.min(.1,(now-last)/1000);last=now;
+  if(playing){const prev=Y; let sp=speed; if(pauseBox.checked&&now<cooldownUntil){const nx=HL.find(h=>h.y>Y+1e-6); if(nx) sp=Math.min(speed,(nx.y-Y)/Math.max(.05,(cooldownUntil-now)/1000));} Y+=dt*sp;
+    if(pauseBox.checked){HL.forEach(h=>{if(prev<h.y&&Y>=h.y&&!pending.includes(h)) pending.push(h);});
+      if(pending.length&&now<cooldownUntil) Y=Math.min(Y,pending[0].y);
+      if(pending.length&&now>=cooldownUntil){const h=pending.shift(); Y=h.y; playing=false; playBtn.textContent='Continue'; showHL(h,true);}}
+    if(Y>=Y1){Y=Y1;playing=false;playBtn.textContent='Play again';}
+    scrub.value=Y;}
+  draw(Y,false,now); requestAnimationFrame(tick);}
+Promise.all([fetch('countries-110m.json').then(r=>r.json()),fetch('states-10m.json').then(r=>r.json())]).then(([w,u])=>{
+  landG.append('path').attr('d',path(topojson.feature(w,w.objects.countries))).attr('fill','var(--land)').attr('stroke','var(--border)').attr('stroke-width',.6).attr('vector-effect','non-scaling-stroke');
+  stateG.append('path').attr('d',path(topojson.mesh(u,u.objects.states,(a,b)=>a!==b))).attr('fill','none').attr('stroke','var(--border)').attr('stroke-opacity',.55).attr('stroke-width',.4).attr('vector-effect','non-scaling-stroke');
+}).catch(()=>{cap.hidden=false;cap.textContent='The map outlines could not load. The journeys still play over a blank ocean.';});
+draw(Y,true,0); cap.hidden=false; cap.textContent='Press Play to watch the family move across four centuries. Each line is a journey and each dot a living person. The ★ stories pause the map as they come up.';
+requestAnimationFrame(tick);
+</script>
+
+</body>
+</html>

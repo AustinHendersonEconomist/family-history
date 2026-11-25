@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="An animated map of the Snouse and Ashmead families and their branches, 1610 to 2020, with links to records.">
+<title>Snouse &amp; Ashmead Family Migrations</title>
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img,svg{max-width:100%}[hidden]{display:none!important}</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: night-chart map (dark-first) with a timeline bar beneath and a chronicle panel beside it; stacks on phones */
+:root{
+  --bg:#0b151d; --panel:#122230; --line:#22384a; --ink:#e7eef2; --muted:#93a8b5;
+  --ocean:#0e1c27; --land:#1d2e3a; --border:#3a5567;
+  --c-hen:#eba845; --c-wiv:#e07f70; --c-wor:#93cc7c; --c-pet:#72b8ea; --c-bis:#bd98e6; --c-cox:#5fc7b4; --c-ens:#f4efe6;
+  --hl:#f2c14e; --display:"Newsreader",Georgia,serif; --ui:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){ --hl:#a86f00;
+  --bg:#f2f5f7; --panel:#ffffff; --line:#cfdbe3; --ink:#14232e; --muted:#566c7d;
+  --ocean:#d6e5ee; --land:#f7f9f8; --border:#9fb5c4;
+  --c-hen:#b56d0c; --c-wiv:#b8473a; --c-wor:#3f8a2c; --c-pet:#1f6fae; --c-bis:#7a4cb3; --c-cox:#13806e; --c-ens:#3a3a3a;
+  color-scheme:light}}
+:root[data-theme="light"]{ --hl:#a86f00;
+  --bg:#f2f5f7; --panel:#ffffff; --line:#cfdbe3; --ink:#14232e; --muted:#566c7d;
+  --ocean:#d6e5ee; --land:#f7f9f8; --border:#9fb5c4;
+  --c-hen:#b56d0c; --c-wiv:#b8473a; --c-wor:#3f8a2c; --c-pet:#1f6fae; --c-bis:#7a4cb3; --c-cox:#13806e; --c-ens:#3a3a3a;
+  color-scheme:light}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1280px;margin:0 auto;padding-block:20px 40px;display:flex;flex-direction:column;gap:16px}
+header{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:8px 24px}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(1.6rem,3.2vw,2.3rem);line-height:1.1;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0;max-width:62ch}
+.grid{display:grid;grid-template-columns:minmax(0,2.3fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.mapbox{position:relative;background:var(--ocean);border:1px solid var(--line);border-radius:6px;overflow:hidden;aspect-ratio:1000/620;max-width:100%}
+#map{display:block;width:100%;height:100%}
+.year{position:absolute;left:14px;top:8px;font-family:var(--display);font-size:clamp(2rem,6vw,3.6rem);font-weight:500;color:var(--ink);opacity:.92;pointer-events:none;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.caption{position:absolute;left:12px;right:12px;bottom:10px;background:color-mix(in srgb,var(--panel) 88%,transparent);border:1px solid var(--line);border-radius:4px;padding:6px 10px;font-size:.86rem;min-height:2.2em;pointer-events:none}
+.caption b{font-family:var(--mono);font-weight:500;margin-right:6px}
+.caption[hidden]{display:none}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.controls button{font:600 .9rem var(--ui);background:var(--c-hen);color:#14100a;border:0;border-radius:4px;padding:7px 14px;cursor:pointer;min-width:6.5em}
+.controls button:focus-visible,.controls input:focus-visible,.controls select:focus-visible,.chip input:focus-visible+span{outline:2px solid var(--c-pet);outline-offset:2px}
+.controls input[type=range]{flex:1 1 220px;min-width:0;accent-color:var(--c-hen)}
+.controls label{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.controls select{font:inherit;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:4px 6px}
+.ticks{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+aside{display:flex;flex-direction:column;gap:14px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;min-width:0}
+.card h2{font-family:var(--display);font-weight:600;font-size:1.1rem;margin:0 0 8px}
+.chips{display:flex;flex-direction:column;gap:6px}
+.chip{display:flex;align-items:center;gap:8px;font-size:.86rem;cursor:pointer}
+.chip input{position:absolute;opacity:0;width:1px;height:1px}
+.chip span.sw{width:22px;height:4px;border-radius:2px;flex:none}
+.chip input:not(:checked)~span{opacity:.35}
+.conf{display:grid;grid-template-columns:44px 1fr;gap:4px 10px;font-size:.8rem;color:var(--muted);margin-top:10px;align-items:center}
+.conf svg{display:block}
+.log{max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;font-size:.82rem;padding-right:4px}
+.log .ev{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:4px;border-radius:3px;border-left:3px solid transparent}
+.log .ev[hidden]{display:none}
+.log button{all:unset;cursor:pointer;display:grid;grid-template-columns:3.2em minmax(0,1fr);gap:8px;padding:4px 6px;border-radius:3px;min-width:0}
+.cite{font-family:var(--mono);font-size:.7rem;color:var(--muted);padding:5px 4px;text-underline-offset:2px}
+.cite.rec{color:var(--c-pet)}
+.cite:focus-visible,.src a:focus-visible{outline:2px solid var(--c-pet);outline-offset:1px}
+.hlcard .src{font-size:.78rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 10px}
+.hlcard .src:empty{display:none}
+.hlcard .src a{color:var(--c-pet)}
+.log button:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.log button:focus-visible{outline:2px solid var(--c-pet)}
+.log .y{font-family:var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.log .on{background:color-mix(in srgb,var(--ink) 10%,transparent)}
+.log .who{font-weight:600}
+.note{font-size:.84rem;color:var(--muted)}
+.note p{margin:0 0 6px}
+.note strong{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.mapwrap{position:relative;display:flex;flex-direction:column;gap:10px}
+.hlcard{position:absolute;top:10px;right:10px;width:min(340px,calc(100% - 20px));max-height:calc(100% - 20px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--hl);border-radius:6px;padding:12px 14px;box-shadow:0 8px 28px rgba(0,0,0,.28);display:flex;flex-direction:column;gap:6px;z-index:5}
+.hlcard[hidden]{display:none}
+.hlcard .hy{font-family:var(--mono);font-size:.76rem;color:var(--hl);letter-spacing:.05em}
+.hlcard h3{font-family:var(--display);font-size:1.25rem;line-height:1.2;margin:0;font-weight:600;text-wrap:balance}
+.hlcard p{margin:0;font-size:.9rem;line-height:1.55}
+.hlcard .row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap}
+.hlcard .hp{font-size:.78rem;color:var(--muted)}
+.hlcard button{font:600 .85rem var(--ui);background:var(--hl);color:#1a1405;border:0;border-radius:4px;padding:7px 16px;cursor:pointer}
+.hlcard button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+@media (max-width:760px){.hlcard{position:static;width:auto;max-height:none;box-shadow:none}}
+.log .star{background:color-mix(in srgb,var(--hl) 10%,transparent)}
+.log .star .who{color:var(--hl);font-weight:600}
+.chip .cn{display:block}.chip .cd{display:block;font-size:.74rem;color:var(--muted);line-height:1.3}
+.controls .pz{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.about p{margin:0 0 6px}
+nav.fam{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:.88rem;padding-block:12px 0;max-width:1280px;margin:0 auto}
+nav.fam a{color:inherit;opacity:.75;text-underline-offset:3px}nav.fam a[aria-current]{opacity:1;font-weight:600;text-decoration:none}
+</style>
+</head>
+<body>
+<nav class="fam" aria-label="Family history pages"><a href="index.html">Start</a><a href="henderson.html">Henderson map</a><a href="snouse-ashmead.html" aria-current="page">Snouse &amp; Ashmead map</a><a href="languages.html">Languages</a><a href="lore.html">Lore vs. records</a></nav>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Snouse &amp; Ashmead Family Migrations, 1610–2020</h1>
+      <p class="sub">The Snouse and Ashmead ancestors: Dutch, Norwegian and Palatine settlers of New Netherland, a Mohawk grandmother, English Quakers, Germans, Swiss and Scots, all moving west through Ohio and Iowa to Illinois and the Pacific coast. ★ marks moments in history they lived through.</p>
+    </div>
+  </header>
+
+  <div class="grid">
+    <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+      <div class="mapwrap"><div class="mapbox">
+        <svg id="map" viewBox="0 0 1000 620" role="img" aria-label="Animated map of family movements"></svg>
+        <div class="year" id="yearBig">2020</div>
+        <div class="caption" id="caption">Press Play to watch three and a half centuries of movement. Every line is a journey. The dot is the person, alive at that time.</div>
+      </div>
+      <div class="hlcard" id="hl" hidden aria-live="polite"><span class="hy"><span id="hlYear"></span> · <span id="hlNum"></span></span><h3 id="hlTitle"></h3><p id="hlBody"></p><p class="src" id="hlSrc"></p><div class="row"><span class="hp" id="hlPlace"></span><button id="hlGo" type="button">Continue</button></div></div></div>
+      <div class="controls">
+        <button id="play" type="button">Play</button>
+        <input id="scrub" type="range" min="1610" max="2020" step="0.1" value="2020" aria-label="Year">
+        <label for="speed">Speed
+          <select id="speed"><option value="1.5">Slow</option><option value="3" selected>Normal</option><option value="7">Fast</option></select>
+        </label>
+        <label class="pz" for="pauseHL"><input type="checkbox" id="pauseHL" checked> Pause for ★ stories</label>
+        <span class="ticks">1610 → 2020</span>
+      </div>
+    </div>
+
+    <aside>
+      <div class="card">
+        <h2>Family lines</h2>
+        <div class="chips" id="chips"></div>
+        <div class="conf">
+          <svg width="44" height="8"><line x1="2" y1="4" x2="42" y2="4" stroke="currentColor" stroke-width="2.4"/></svg><span>Record I read myself</span>
+          <svg width="44" height="8"><line x1="2" y1="4" x2="42" y2="4" stroke="currentColor" stroke-width="1.3" opacity=".8"/></svg><span>Family trees or family memory, not checked</span>
+          <svg width="44" height="8"><line x1="2" y1="4" x2="42" y2="4" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3"/></svg><span>Assumed or inferred move</span>
+          <svg width="44" height="8"><line x1="2" y1="4" x2="42" y2="4" stroke="currentColor" stroke-width="1.5" stroke-dasharray="1.5 3"/></svg><span>Doubtful claim</span>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Chronicle</h2>
+        <p class="note" style="margin:0 0 8px">Tap a line to jump to that year. “record” opens the document itself, and “tree” or “page” opens a profile. FamilySearch records need a free sign-in.</p>
+        <div class="log" id="log"></div>
+      </div>
+      <div class="card note">
+        <h2>Worth checking</h2>
+        <p><strong>Ashmead:</strong> one Ancestry tree makes Samuel Ashmead (born 1794 in Maryland) the son of Capt. John Ashmead and Mary Mifflin of Philadelphia. Mary would have been 47, and FamilySearch doesn’t make the link, so the map shows it as doubtful.</p>
+        <p><strong>Gertrude Smith:</strong> an earlier version of this map said she was born in Iowa. That was wrong. The 1910 and 1920 censuses say Illinois, and her daughter’s 1933 birth record says Galesburg, as the Ancestry tree does.</p>
+        <p><strong>Huber:</strong> FamilySearch places Christina Huber’s birth in “Mecklenburg”, but the 1860 census confirms Württemberg.</p>
+        <p><strong>McMaster:</strong> Mary M. Thompson’s parents turned out to be William A. Thompson and <strong>Mary E. McMaster</strong> of Altona, Illinois (1904 marriage record).</p>
+        <p><strong>A Mohawk ancestor:</strong> through Lorinda Multer’s mother, the tree reaches Jacques Van Slyck of Schenectady, whose mother was a Mohawk woman. Local histories document that, though not her name. She would be a direct ancestor. Every link down to Lorinda is backed by a church record or published genealogy, except one, Santje Vrooman’s parentage, which is probable.</p>
+      </div>
+      <div class="card note about">
+        <h2>About this map</h2>
+        <p><a href="lore.html" style="color:var(--c-pet)">Lore vs. records</a> lists where the documents and the stories disagree.</p>
+        <p>This map was researched by Austin in November 2026, with Claude (an AI model), using census and vital records on FamilySearch, an Ancestry family tree, Dutch Reformed church records from Schoharie, Pearson’s genealogies of the first settlers of Schenectady, a Salt Lake County death record, published county histories, and sourced profiles on WikiTree for the earliest families. Some links in those early lines still rest on family trees.</p>
+        <p>Thick lines are journeys backed by a record. Thin lines come from family trees that haven't been checked, dashed lines are reasonable guesses (for example, an emigration date worked out from where children were born), and dotted lines are family stories that remain unproven.</p>
+        <p>★ stories set the family against the history happening around them. Turn off “Pause for ★ stories” to let the map run straight through.</p>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+const P={
+ sax:[13.0,51.0,'Saxony, Germany'], wur:[8.72,48.55,'Emmingen, near Nagold, Württemberg'], grv:[-84.63,40.10,'Greenville, Darke Co., Ohio'],
+ nas:[-92.54,42.95,'Nashua, Chickasaw Co., Iowa'], cos:[-104.82,38.83,'Colorado Springs, Colorado'], rki:[-90.58,41.51,'Rock Island, Illinois'],
+ spo:[-83.81,39.92,'Springfield, Ohio'], urb:[-83.75,40.11,'Urbana, Champaign Co., Ohio'], esc:[-87.06,45.75,'Escanaba, Michigan'],
+ gal:[-90.37,40.95,'Galesburg, Illinois'], hil:[-90.35,41.03,'Henderson, Knox Co., Illinois'], sjc:[-121.89,37.34,'San Jose, California'],
+ lom:[-120.46,34.64,'Lompoc, California'], phl:[-75.16,39.95,'Philadelphia, Pennsylvania'], frd:[-77.41,39.41,'Frederick Co., Maryland'],
+ fai:[-82.6,39.72,'Fairfield Co., Ohio'], shm:[-92.04,39.80,'Shelby Co., Missouri'], als:[7.93,48.99,'Ingolsheim, Alsace'],
+ pfa:[7.61,48.84,'Pfaffenhoffen, Alsace'], ber:[7.69,46.62,'Reichenbach im Kandertal, Bern, Switzerland'], ypa:[-76.73,39.96,'York, Pennsylvania'],
+ fva:[-81.1,38.05,'Fayette Co., (West) Virginia'], don:[-7.4,55.15,'Inishowen, Co. Donegal, Ireland'], aug:[-79.07,38.15,'Augusta Co., Virginia'],
+ lor:[7.66,47.61,'Wies, Lörrach, Baden'], fky:[-83.7,38.37,'Fleming Co., Kentucky'], mky:[-83.83,38.6,'Mason Co., Kentucky'],
+ she:[-2.54,51.19,'Shepton Mallet, Somerset, England'], pgm:[-76.85,38.83,'Prince George’s Co., Maryland'], bon:[-3.61,56.02,'Bo’ness, Scotland'],
+ bkv:[-77.96,39.46,'Berkeley Co., (West) Virginia'], fvv:[-78.17,39.19,'Frederick Co., Virginia'], gtn:[-75.18,40.04,'Germantown, Pennsylvania'],
+ hmd:[-76.33,39.53,'Maryland'], pik:[-79.95,40.08,'Pike Run, Washington Co., Pennsylvania'], lib:[-92.05,40.96,'Libertyville, Jefferson Co., Iowa'],
+ ham:[-84.51,39.10,'Hamilton Co., Ohio'], lyc:[-77.0,41.24,'Lycoming Co., Pennsylvania'], keo:[-91.40,40.40,'Keokuk, Lee Co., Iowa'],
+ sch:[-92.52,40.47,'Schuyler Co., Missouri'], ott:[-92.41,41.02,'Ottumwa, Iowa'], kew:[-89.92,41.25,'Kewanee, Illinois'],
+ chp:[-75.6,39.95,'Chester Co., Pennsylvania'], old:[-2.12,53.54,'Oldham, Lancashire, England'], act:[-2.53,53.07,'Acton, Cheshire, England'],
+ gar:[-2.89,53.35,'Garston, Lancashire, England'], spe:[-1.51,51.88,'Spelsbury, Oxfordshire, England'], brm:[-2.05,51.38,'Bromham, Wiltshire, England'],
+ gra:[-0.14,52.18,'Great Gransden, Huntingdonshire, England'], nwr:[-6.34,54.18,'Newry, Co. Down, Ireland'], pre:[-2.97,55.96,'Prestonpans, Scotland'],
+ cam:[-5.6,55.43,'Campbeltown, Argyll, Scotland'], egg:[-74.6,39.38,'Egg Harbor, New Jersey'], clo:[-84.15,39.05,'Clermont Co., Ohio'],
+ stp:[-0.05,51.52,'Stepney, London'], wdc:[-77.04,38.9,'Washington, D.C.'], pai:[-4.42,55.85,'Paisley, Renfrewshire, Scotland'],
+ cdw:[-5.9,54.35,'Co. Down, Ireland'], chi:[-82.98,39.33,'Chillicothe, Ohio'], prv:[-120.83,44.30,'Prineville, Oregon'],
+ tyr:[-7.2,54.6,'Co. Tyrone, Ireland'], pot:[-76.20,40.69,'Pottsville, Pennsylvania'], can:[-92.07,40.64,'Cantril, Van Buren Co., Iowa'],
+ slc:[-111.89,40.76,'Salt Lake City, Utah'], cum:[-2.93,54.6,'Cumberland, England'], pon:[-76.25,44.9,'Perth, Ontario'],
+ mil:[-92.16,40.67,'Milton, Van Buren Co., Iowa'], alx:[-91.46,40.36,'Alexandria, Clark Co., Missouri'], col:[-83.0,39.96,'Columbus, Ohio'],
+ kin:[-98.11,37.65,'Kingman, Kansas'], amw:[-74.86,40.43,'Amwell, Hunterdon Co., New Jersey'], oys:[-73.53,40.87,'Oyster Bay, New York'],
+ bot:[-79.81,37.55,'Botetourt Co., Virginia'], alb:[-73.75,42.65,'Albany, New York'], cgo:[-87.63,41.88,'Chicago, Illinois'],
+ pit:[-92.1,40.75,'Pittsburg, Van Buren Co., Iowa'], dsm:[-93.62,41.59,'Des Moines, Iowa']
+};
+const G={
+ sno:['Snouse & Huber','--c-hen','Saxony and Württemberg → Ohio → Illinois'],
+ mil:['Miller, Richards & Powell','--c-wiv','Alsace, Switzerland, England → Maryland → Ohio'],
+ ash:['Ashmead & the Quakers','--c-pet','English Quakers → Pennsylvania → Iowa'],
+ mcc:['McClain, Betterton & Erskine','--c-bis','Scotland, London, Ulster → New Jersey → Iowa'],
+ smi:['Smith, Tully & Runnells','--c-wor','Ireland → Pennsylvania → Iowa (and Utah)'],
+ tho:['Thompson','--c-cox','Knox County, Illinois'],
+ mcm:['McMaster, Multer & Dutch New York','--c-ens','Ayrshire; Norway, Holland, the Palatinate, and the Mohawk']
+};
+const T=[
+ {n:'Michael Snouse (Schnaus)',g:'sno',d:1863,s:[[1795,'sax','D','Born, Saxony (1860 census)'],[1850,'grv','A','Emigrates to Ohio with his family, after 1842'],[1860,'grv','D','Greenville, Ohio, with son John (1860 census)'],[1863,'grv','T','Dies, Darke Co., Ohio']]},
+ {n:'Andreas Huber',g:'sno',d:1809,s:[[1731,'wur','T','Born, Emmingen, Württemberg'],[1809,'wur','T','Dies, Emmingen']]},
+ {n:'George (Johann G.) Huber',g:'sno',d:1887,s:[[1808,'wur','D','Born, Württemberg (1860 census)'],[1845,'grv','A','Emigrates with his children to Greenville, Ohio'],[1846,'grv','T','First wife Anna Maria Strentz dies at Greenville'],[1860,'grv','D','Greenville, with second wife Caroline (1860 census)'],[1887,'grv','T','Dies, Greenville']]},
+ {n:'Christopher Huber',g:'sno',d:1919,s:[[1838,'wur','D','Born, Württemberg (1860 census)'],[1845,'grv','A','To Ohio with his family'],[1860,'grv','D','Greenville (1860 census)'],[1919,'phl','T','Dies, Philadelphia']]},
+ {n:'Christina K. Huber',g:'sno',d:1890,s:[[1843,'wur','D','Born, Württemberg (1860 census)'],[1845,'grv','A','To Greenville, Ohio as a small child'],[1860,'grv','D','With her father George Huber (1860 census)'],[1870,'nas','D','Nashua, Iowa, with John (1870 census)'],[1880,'nas','D','Nashua, with John and children (1880 census)'],[1890,'nas','T','Dies, Iowa']]},
+ {n:'John Snouse',g:'sno',d:1921,s:[[1842,'sax','D','Born, Saxony (1860 census); his death record also says Germany, not Ohio'],[1850,'grv','A','Emigrates with his parents'],[1860,'grv','D','Greenville, Ohio (1860 census)'],[1870,'nas','D','Nashua, Iowa (1870 census)'],[1880,'nas','D','Nashua (1880 census)'],[1910,'grv','D','Back in Greenville (1910 census)'],[1921,'grv','D','Dies, Greenville, Ohio (death record)']]},
+ {n:'Harry William Snouse',g:'sno',d:1943,s:[[1874,'nas','D','Born, Nashua, Iowa (1880 census)'],[1900,'grv','D','Greenville, Ohio (1900 census)'],[1904,'cos','T','Colorado Springs; son Harold born 1907'],[1910,'rki','D','Rock Island, Illinois (1910 census)'],[1920,'gal','D','Galesburg, Illinois (1920 census)'],[1930,'dav','D','Davenport, Iowa (1930 census)'],[1935,'day','D','In Dayton, Ohio in 1935 (1940 census)'],[1940,'spo','D','German Township, near Springfield, Ohio (1940 census)'],[1943,'spo','T','Dies, Springfield, Ohio']]},
+ {n:'Harold Clifton Snouse',g:'sno',d:1988,s:[[1907,'cos','D','Born, Colorado (1910 census)'],[1910,'rki','D','Rock Island, Illinois (1910 census)'],[1920,'gal','D','Galesburg (1920 census)'],[1932,'gal','T','Marries Mary M. Thompson of Galesburg'],[1934,'spo','Q','In Ohio when son Thomas was born? (census birthplace)'],[1935,'hil','D','In the same Henderson Township house on 1 April 1935 (1940 census)'],[1940,'hil','D','Henderson Township, Knox Co. (1940 census)'],[1950,'hil','D','Henderson Township (1950 census)'],[1988,'hil','T','Dies, Henderson, Illinois']]},
+ {n:'Thomas W. Snouse',g:'sno',d:2017,s:[[1934,'spo','Q','Born in Ohio about 1934 (1940 and 1950 censuses) or Illinois in 1933 (family tree)'],[1935,'hil','D','Henderson Township, Knox Co. by April 1935 (1940 census)'],[1950,'hil','D','Henderson Township (1950 census)'],[2017,'lom','T','Dies, Lompoc, California']]},
+ {n:'Mary M. Thompson',g:'tho',d:2002,s:[[1907,'gal','D','Born 7 Aug 1907; daughter of William A. Thompson and Mary E. McMaster'],[1920,'gal','D','Galesburg, with parents and sister Helen (1920 census)'],[1932,'gal','T','Marries Harold Snouse'],[1940,'hil','D','Henderson Township (1940 census)'],[1950,'hil','D','Henderson Township (1950 census)'],[2002,'sjc','D','Dies, San Jose (Social Security index)']]},
+
+ {n:'Marcus Bigler',g:'mil',d:1787,s:[[1705,'als','T','Born, Ingolsheim, Alsace'],[1735,'frd','A','Emigrates to Maryland'],[1787,'frd','T','Dies, Pipe Creek, Maryland']]},
+ {n:'Johannes Peter Schleiffer',g:'mil',d:1767,s:[[1718,'ber','T','Born, Canton Bern, Switzerland'],[1740,'ypa','A','Emigrates to Pennsylvania'],[1767,'ypa','T','Dies, York']]},
+ {n:'Rudolph Brown',g:'mil',d:1769,s:[[1702,'pfa','T','Born, Pfaffenhoffen, Alsace'],[1735,'ypa','A','Emigrates to Pennsylvania'],[1769,'ypa','T','Dies, York']]},
+ {n:'Edward Strode',g:'mil',d:1741,s:[[1691,'she','T','Born, Shepton Mallet (tree); the attached baptism is at Mells, nearby, 25 May 1690'],[1720,'pgm','A','Emigrates to Maryland'],[1741,'pgm','T','Dies']]},
+ {n:'Elizabeth Ann Hamilton',g:'mil',d:1761,s:[[1698,'bon','D','Baptised 19 Apr 1698, Bo’ness, Scotland'],[1725,'bkv','A','Emigrates'],[1761,'bkv','T','Dies, Berkeley Co., Virginia']]},
+ {n:'James Ward (the immigrant)',g:'mil',d:1763,s:[[1701,'don','T','Born, Inishowen, Co. Donegal'],[1735,'aug','A','Emigrates to Virginia'],[1763,'aug','T','Dies, Augusta Co.']]},
+ {n:'Jacob Yeazel',g:'mil',d:1828,s:[[1741,'lor','T','Born, Wies, Baden'],[1760,'fvv','A','Emigrates to Virginia'],[1795,'fky','A','Moves to Kentucky'],[1810,'fky','D','Flemingsburg, Fleming Co. (1810 census)'],[1828,'fky','T','Dies, Fleming Co., Kentucky']]},
+ {n:'Joseph Miller',g:'mil',d:1835,s:[[1764,'frd','T','Born, Frederick Co., Maryland'],[1805,'fai','A','Moves to Ohio'],[1835,'fai','T','Dies, Fairfield Co., Ohio']]},
+ {n:'Isaac Evans Jr.',g:'mil',d:1812,s:[[1752,'fvv','T','Born, Frederick Co., Virginia'],[1805,'urb','A','Moves to Ohio'],[1812,'urb','T','Dies, Urbana Township']]},
+ {n:'Andrew Richards',g:'mil',d:1839,s:[[1785,'fva','T','Born, Fayette Co., Virginia'],[1810,'urb','A','Moves to Champaign Co., Ohio'],[1820,'urb','D','Urbana Township (1820 census)'],[1839,'urb','T','Dies']]},
+ {n:'Henry Powell',g:'mil',d:1868,s:[[1796,'mky','D','Born, Kentucky (1860 census); the tree says Mason Co.'],[1815,'urb','A','Moves to Champaign Co., Ohio'],[1850,'urb','D','Urbana Township (1850 census)'],[1868,'urb','T','Dies']]},
+ {n:'Martin Oliver Miller',g:'mil',d:1904,s:[[1822,'frd','D','Born, Maryland (1860 census; the 1850 census says New Jersey)'],[1830,'urb','A','Family settles in Champaign Co., Ohio'],[1850,'urb','D','Urbana Township (1850 census)'],[1860,'shm','D','Bethel Township, Shelby Co., Missouri (1860 census)'],[1900,'shm','D','Shelby Co. (1900 census)'],[1904,'shm','T','Dies, Shelby Co., Missouri']]},
+ {n:'John Adam Miller',g:'mil',d:1915,s:[[1851,'urb','T','Born, Champaign Co., Ohio'],[1860,'urb','D','Urbana Township (1860 census)'],[1880,'urb','D','Urbana Township, with daughter Florence (1880 census)'],[1900,'grv','D','Greenville Township, Darke Co. (1900 census)'],[1915,'grv','T','Dies, Darke Co., Ohio']]},
+ {n:'Florence Mae Miller',g:'mil',d:1961,s:[[1878,'urb','D','Born, Ohio; with John A. and Sallie Miller in Urbana Township (1880 census)'],[1900,'grv','D','Greenville, Ohio (1900 census)'],[1904,'cos','T','Colorado Springs'],[1910,'rki','D','Rock Island, Illinois (1910 census)'],[1920,'gal','D','Galesburg (1920 census)'],[1930,'dav','D','Davenport, Iowa (1930 census)'],[1940,'spo','D','German Township, near Springfield, Ohio (1940 census)'],[1961,'esc','T','Dies, Escanaba, Michigan']]},
+
+ {n:'Richard Woodward',g:'ash',d:1706,s:[[1639,'act','T','Born, Acton, Cheshire (tree, 1639); the attached baptism is Nantwich, next door, in 1636'],[1683,'chp','A','Quaker emigrant to Penn’s colony'],[1706,'chp','T','Dies, Chester Co.']]},
+ {n:'Francis Stanfield',g:'ash',d:1692,s:[[1642,'gar','T','Born, Garston, Lancashire'],[1683,'chp','A','Quaker emigrant to Pennsylvania'],[1692,'chp','T','Dies, Marple Township']]},
+ {n:'John Bentley',g:'ash',d:1748,s:[[1656,'gra','D','Baptised 10 Nov 1656, Great Gransden, Huntingdonshire'],[1690,'chp','A','Emigrates to Pennsylvania'],[1748,'chp','T','Dies, Newlin Township']]},
+ {n:'Joel Bayly',g:'ash',d:1732,s:[[1659,'brm','T','Born, Bromham, Wiltshire'],[1685,'chp','A','Emigrates to Pennsylvania'],[1732,'chp','T','Dies, East Marlborough']]},
+ {n:'Joseph Hayes',g:'ash',d:1748,s:[[1698,'spe','T','Born, Spelsbury, Oxfordshire'],[1705,'chp','A','Taken to Pennsylvania'],[1748,'chp','T','Dies, Kennett Township']]},
+ {n:'John Millison',g:'ash',d:1744,s:[[1685,'old','T','Born, Oldham, Lancashire'],[1710,'chp','A','Emigrates to Pennsylvania'],[1744,'chp','T','Dies, Chester Co.']]},
+ {n:'Hugh Cowan',g:'ash',d:1782,s:[[1700,'nwr','T','Born, Newry, Co. Down'],[1725,'chp','A','Emigrates to Pennsylvania'],[1782,'chp','T','Dies']]},
+ {n:'John Henderson (Scotland)',g:'ash',d:1756,s:[[1676,'pre','T','Born, Prestonpans, Scotland (no relation known to the Hendersons on the other map)'],[1710,'chp','A','Emigrates to Pennsylvania'],[1756,'chp','T','Dies, Chester']]},
+ {n:'James Milleson',g:'ash',d:1841,s:[[1748,'chp','T','Born, Chester Co., Pennsylvania'],[1790,'chp','D','Newlin Township, Chester Co. (1790 census)'],[1800,'pik','D','Pike Run, Washington Co. (1800 census)'],[1841,'pik','T','Dies, Pike Run']]},
+ {n:'Capt. John Ashmead',g:'ash',d:1818,s:[[1757,'gtn','Q','Born, Germantown (link to Samuel doubtful)'],[1818,'phl','Q','Dies, Philadelphia']]},
+ {n:'Samuel Ashmead',g:'ash',d:1869,s:[[1800,'hmd','D','Born, Maryland, about 1794–1800 (1850 census)'],[1830,'pik','T','Pike Run, Pennsylvania; son Hiram born 1835'],[1840,'pik','D','East Pike Run (1840 census)'],[1850,'pik','D','East Pike Run, with Abigail and Hiram (1850 census)'],[1855,'lib','A','Moves to Iowa'],[1860,'lib','D','Des Moines Township, Jefferson Co., Iowa (1860 census)'],[1869,'lib','T','Dies, Libertyville, Iowa']]},
+ {n:'Abigail Milleson',g:'ash',d:1874,s:[[1796,'pik','D','Born, Pennsylvania (1850 census); the tree says Pike Run'],[1850,'pik','D','East Pike Run (1850 census)'],[1855,'lib','A','To Iowa'],[1860,'lib','D','Jefferson Co., Iowa (1860 census)'],[1870,'lib','D','Jefferson Co. (1870 census)'],[1874,'lib','T','Dies, Libertyville']]},
+ {n:'Samuel W. Morrison',g:'ash',d:1847,s:[[1782,'lyc','T','Born, Lycoming Co., Pennsylvania'],[1815,'ham','A','Hamilton Co., Ohio'],[1847,'keo','T','Dies, Lee Co., Iowa']]},
+ {n:'Hiram Ashmead',g:'ash',d:1918,s:[[1835,'pik','D','Born 27 Jan 1835, Pennsylvania (Iowa grave registration); FamilySearch’s tree says Maryland'],[1850,'pik','D','With his parents (1850 census)'],[1855,'lib','A','To Iowa'],[1880,'lib','D','Jefferson Co., Iowa, with son Jesse (1880 census)'],[1907,'lib','D','Drawing a military pension by his death (pension cards 1907–33)'],[1918,'lib','D','Dies 16 July 1918, Libertyville (grave registration)']]},
+ {n:'Elizabeth Ellen Morrison',g:'ash',d:1932,s:[[1839,'ham','D','Born Dec 1839, Ohio (1900 census)'],[1850,'lib','D','Morrison household, Jefferson Co., Iowa (1850 census)'],[1880,'lib','D','Jefferson Co., with Hiram (1880 census)'],[1920,'lib','D','Libertyville (1920 census)'],[1932,'lib','T','Dies 23 Mar 1932, Libertyville']]},
+ {n:'Jesse Preston Ashmead',g:'ash',d:1969,s:[[1871,'lib','D','Born, Iowa (1880 census)'],[1910,'lib','D','Liberty Township, with son Israel (1910 census)'],[1920,'wap','D','Richland Township, Wapello Co. (1920 census)'],[1930,'ott','D','Ottumwa (1930 census)'],[1940,'lib','D','Libertyville (1940 census)'],[1969,'lib','T','Dies, Libertyville']]},
+ {n:'Israel Delmar Ashmead',g:'ash',d:1968,s:[[1908,'lib','D','Born 12 Nov 1908, Libertyville (delayed birth record)'],[1910,'lib','D','Liberty Township (1910 census)'],[1920,'wap','D','Richland Township, Wapello Co. (1920 census)'],[1930,'ott','D','Ottumwa (1930 census)'],[1932,'sch','T','Marries Gertrude Smith, Schuyler Co., Missouri'],[1933,'ott','D','Ottumwa, when daughter Betty is born'],[1940,'gal','D','Galesburg Township (1940 census)'],[1950,'gal','D','Galesburg Township (1950 census)'],[1968,'kew','T','Dies, Kewanee (Ancestry) or Pope Co., Illinois (FamilySearch)']]},
+ {n:'Betty Ashmeade',g:'ash',d:1990,s:[[1933,'ott','D','Born 1933, Ottumwa, Iowa (birth record)'],[1940,'gal','D','Galesburg Township, with parents and grandmother Pearl (1940 census)']]},
+
+ {n:'Andrew McClain',g:'mcc',d:1777,s:[[1745,'cam','T','Born, Campbeltown, Argyll'],[1765,'egg','A','Emigrates to New Jersey'],[1777,'egg','Q','Dies 1777 (place in tree is garbled)']]},
+ {n:'Benjamin Betterton',g:'mcc',d:1756,s:[[1704,'stp','T','Born, Stepney, London'],[1730,'phl','A','Emigrates to Philadelphia'],[1756,'phl','T','Dies, Philadelphia']]},
+ {n:'Archibald Gardner',g:'mcc',d:1796,s:[[1721,'pai','T','Born, Abbey parish, Paisley, 1721 (tree); the attached baptism is 28 Feb 1725'],[1750,'phl','A','Emigrates to Philadelphia'],[1796,'phl','T','Dies, Philadelphia']]},
+ {n:'John Erskine',g:'mcc',d:1858,s:[[1764,'cdw','T','Born, Co. Down, Ireland (tree); the 1850 census says Scotland'],[1790,'chp','A','Emigrates to Pennsylvania'],[1850,'chp','D','Ridley Township, Delaware Co., beside Chester Co. (1850 census)'],[1858,'chp','T','Dies, Chester Co.']]},
+ {n:'Peter McClain',g:'mcc',d:1830,s:[[1770,'egg','T','Born, English Creek, Egg Harbor, New Jersey'],[1805,'clo','A','Moves to Ohio'],[1830,'clo','T','Dies, Clermont Co., Ohio']]},
+ {n:'William Gardner Betterton',g:'mcc',d:1860,s:[[1801,'wdc','D','Born, District of Columbia (1850 census)'],[1830,'som','D','Addison, Somerset Co., Pennsylvania (1830 census)'],[1840,'vbu','D','Van Buren Co., Iowa Territory (1840 census)'],[1850,'ott','D','Wapello Co., Iowa (1850 census)'],[1860,'ott','T','Dies, Wapello Co., Iowa']]},
+ {n:'Joseph Benson McClain',g:'mcc',d:1888,s:[[1819,'clo','D','Born, Ohio (1860 census); the tree says Clermont Co.'],[1850,'lib','A','Moves to Iowa'],[1851,'lib','T','Son Edwin born, Libertyville'],[1860,'lib','D','Liberty Township (1860 census)'],[1880,'lib','D','Liberty Township (1880 census)'],[1888,'lib','T','Dies, Libertyville']]},
+ {n:'Alice Mary Raines',g:'mcc',d:1934,s:[[1853,'chi','D','Born Dec 1853, Ohio (1900 census); the tree says Chillicothe'],[1860,'lib','D','Liberty Township, Iowa (1860 census)'],[1875,'lib','T','Marries Edwin McClain, Libertyville'],[1880,'lib','D','Liberty Township (1880 census)'],[1910,'lib','D','Jefferson Co. (1910 census)'],[1934,'lib','T','Dies, Libertyville']]},
+ {n:'Effie Mary McClain',g:'mcc',d:1976,s:[[1876,'lib','D','Born, Iowa (1880 census)'],[1910,'lib','D','Liberty Township (1910 census)'],[1920,'wap','D','Richland Township, Wapello Co. (1920 census)'],[1930,'ott','D','Ottumwa (1930 census)'],[1976,'prv','T','Dies, Prineville, Oregon, aged 99']]},
+
+ {n:'Dr. William Edward Tully',g:'smi',d:1845,s:[[1780,'cum','T','Born, Cumberland, England'],[1810,'mayo','A','In Ireland (married Olivia Ruttledge of Co. Mayo)'],[1830,'pon','A','Emigrates to Upper Canada'],[1845,'pon','T','Dies, Perth, Ontario']]},
+ {n:'Thomas Tully',g:'smi',d:1853,s:[[1811,'mayo','D','Born 9 Apr 1811, Ireland; parents William and Olivia (Utah death record)'],[1835,'pot','D','Daughter Catherine born in Pennsylvania; the tree says Pottsville'],[1850,'stl','D','St. Louis, with his wife and children (1850 census)'],[1853,'slc','D','Dies, Salt Lake City, 13 Nov 1853 (Salt Lake County death record)']]},
+ {n:'John J. Smith',g:'smi',d:1899,s:[[1820,'tyr','D','Born, Ireland (1860 census); the tree says Co. Tyrone'],[1850,'pot','A','Emigrates; marries Catherine Tulley'],[1860,'can','D','Des Moines Township, Van Buren Co. (1860 census)'],[1880,'can','D','Des Moines Township (1880 census)'],[1899,'can','T','Dies, Van Buren Co., Iowa']]},
+ {n:'Catherine Tulley',g:'smi',d:1908,s:[[1835,'pot','D','Born, Pennsylvania (1850, 1860 and 1880 censuses)'],[1850,'stl','D','St. Louis, with her parents (1850 census)'],[1856,'can','A','To Iowa'],[1860,'can','D','Des Moines Township, Van Buren Co., with John Smith (1860 census)'],[1880,'can','D','Des Moines Township (1880 census)'],[1908,'can','T','Dies, Van Buren Co.']]},
+ {n:'Rebeckah van den Bogart',g:'smi',d:1747,s:[[1697,'alb','T','Born, Albany, New York (Dutch family)'],[1720,'amw','A','Amwell, New Jersey'],[1747,'amw','T','Dies']]},
+ {n:'Peter Wright of Virginia',g:'smi',d:1793,s:[[1715,'oys','T','Born, Oyster Bay, Long Island'],[1750,'aug','A','Moves to Virginia'],[1793,'bot','T','Dies, Botetourt Co.']]},
+ {n:'William Rittenhouse',g:'smi',d:1767,s:[[1691,'gtn','T','Born, Germantown, Pennsylvania'],[1730,'amw','A','Moves to New Jersey'],[1767,'amw','T','Dies, Amwell']]},
+ {n:'Horace Clark Godown',g:'smi',d:1900,s:[[1818,'col','D','Born, Ohio (1860 census); the tree says Columbus'],[1850,'col','D','Norwich Township, Franklin Co., Ohio (1850 census)'],[1856,'pit','T','In Iowa; daughter Eunice born, Pittsburg, Van Buren Co.'],[1860,'pit','D','Van Buren Township, Iowa (1860 census)'],[1880,'kin','D','Kingman Co., Kansas (1880 census)'],[1900,'kin','D','Kingman (1900 census); dies there in October']]},
+ {n:'Ruben S. Runells',g:'smi',d:1930,s:[[1848,'alx','D','Born Oct 1848, Missouri (1900 census); the tree says Alexandria'],[1882,'mil','T','Daughter Elnora born, Milton, Iowa'],[1900,'mil','D','Jackson Township, Van Buren Co. (1900 census)'],[1920,'ott','D','Ottumwa (1920 census)'],[1930,'ott','D','Ottumwa (1930 census); dies there in May']]},
+ {n:'William Henry Smith',g:'smi',d:1910,s:[[1857,'can','D','Born, Iowa (1860 and 1870 censuses)'],[1880,'can','D','With son Ernest (1880 census)'],[1900,'can','D','Cantril (1900 census)'],[1910,'can','D','Jackson Township (1910 census); dies in April']]},
+ {n:'Ernest Elmer Smith',g:'smi',d:1939,s:[[1879,'can','D','Born, Iowa (1880 census)'],[1910,'gal','D','Galesburg, Illinois, with baby Gertrude (1910 census)'],[1920,'ott','D','Ottumwa, Iowa (1920 census)'],[1930,'ott','D','Ottumwa (1930 census)'],[1939,'cgo','T','Dies, Chicago']]},
+ {n:'Elnora Pearl Runnells',g:'smi',d:1963,s:[[1882,'mil','D','Born Dec 1882, Iowa (1900 census, with parents Ruben and Mary J.)'],[1910,'gal','D','Galesburg, Illinois, with baby Gertrude (1910 census)'],[1920,'ott','D','Ottumwa, Iowa (1920 census)'],[1930,'ott','D','Ottumwa (1930 census)'],[1940,'gal','D','Living with Gertrude and Israel, Galesburg Township (1940 census)'],[1950,'gal','D','Galesburg Township (1950 census)'],[1963,'gal','T','Dies, Galesburg']]},
+ {n:'Gertrude L. Smith',g:'smi',d:1963,s:[[1909,'gal','D','Born about May 1909, Galesburg (1910 census; her daughter’s birth record)'],[1920,'ott','D','Ottumwa, Iowa (1920 census)'],[1932,'sch','T','Marries Israel Ashmead'],[1933,'ott','D','Ottumwa, when daughter Betty is born'],[1940,'gal','D','Galesburg Township (1940 census)'],[1950,'gal','D','Galesburg Township (1950 census)'],[1963,'gal','T','Dies, Galesburg']]},
+ {n:'William A. Thompson',g:'tho',d:1955,s:[[1879,'alt','D','Born, Altona, Knox Co., Illinois; son of David Thompson and Catherine Richmond'],[1904,'gal','D','Marries Mary E. McMaster'],[1950,'gal','D','Galesburg Township (1950 census)']]},
+ {n:'Mary E. McMaster',g:'tho',d:1955,s:[[1877,'alt','D','Born, Altona; daughter of John McMaster and Lorinda Multer'],[1904,'gal','D','Marries William A. Thompson'],[1950,'gal','D','Galesburg Township (1950 census)']]},
+ {n:'John McMaster Sr.',g:'mcm',d:1888,s:[[1796,'dai','T','Born, Dailly (tree, 1796); the attached baptism is Maybole, next door, 1797'],[1827,'sor','T','At Sorn, Ayrshire; son John born'],[1841,'sor','D','Sorn (1841 census)'],[1855,'alt','A','Follows his son to Illinois'],[1880,'alt','D','Walnut Grove Township, Knox Co. (1880 census)'],[1888,'alt','T','Dies, Altona, Illinois']]},
+ {n:'Ann Struthers',g:'mcm',d:1883,s:[[1802,'sor','D','Baptised 31 Jan 1802, Sorn, Ayrshire'],[1841,'sor','D','Sorn (1841 census)'],[1855,'alt','A','Emigrates to Illinois'],[1870,'alt','D','Walnut Grove Township (1870 census)'],[1883,'alt','T','Dies, Altona']]},
+ {n:'John McMaster',g:'mcm',d:1914,s:[[1827,'sor','D','Born, Ayrshire (1841 census)'],[1841,'sor','D','Sorn, with his parents (1841 census)'],[1852,'alt','D','Emigrates to the United States (1900 census)'],[1861,'alt','D','Marries Lorinda H. Multer, Knox Co. (marriage record)'],[1870,'alt','D','Walnut Grove Township, Knox Co. (1870 census)'],[1900,'alt','D','Altona (1900 census)'],[1914,'alt','T','Dies, Altona']]},
+ {n:'Lorinda Helen Multer',g:'mcm',d:1913,s:[[1838,'wny','D','Born May 1838, New York (1900 census); the tree says South Worcester'],[1850,'wny','D','Worcester, with her parents (1850 census)'],[1855,'wny','D','With parents Joseph and Susan (NY 1855 census)'],[1860,'wny','D','Worcester, with her widowed mother (1860 census)'],[1861,'alt','D','Marries John McMaster in Illinois (marriage record)'],[1870,'alt','D','Walnut Grove Township (1870 census)'],[1913,'alt','T','Dies']]},
+ {n:'Joseph Multer',g:'mcm',d:1858,s:[[1787,'ful','T','Born, Fulda, Hesse (tree), or New York (1850 census)'],[1810,'wny','A','In Otsego Co., New York'],[1813,'wny','A','Sergeant in the New York militia, War of 1812 (pension index; exact date not given)'],[1850,'wny','D','Worcester (1850 census)'],[1855,'wny','D','Worcester (NY 1855 census)'],[1858,'wny','T','Dies, South Worcester']]},
+ {n:'Susanna Becker',g:'mcm',d:1872,s:[[1794,'sho','D','Christened 27 Sep 1794, Schoharie; daughter of Ludwig Becker and Eva Hagedoorn'],[1850,'wny','D','Worcester, with Joseph and children (1850 census)'],[1870,'wny','D','With son Henry (1870 census)'],[1872,'wny','T','Dies, Worcester']]},
+ {n:'Johann Henrich Mattice',g:'mcm',d:1716,s:[[1667,'pal','T','Born, the Palatinate'],[1710,'sho','A','One of the Palatine emigrants of 1710'],[1716,'sho','T','Dies, Schoharie']]},
+ {n:'Jan Jurians Becker',g:'mcm',d:1697,s:[[1630,'ams','T','Born, Amsterdam'],[1655,'alb','A','To New Netherland'],[1697,'alb','T','Dies, Albany']]},
+ {n:'Hendrick Meese Vrooman',g:'mcm',d:1690,s:[[1618,'lei','T','Born, Leiden'],[1664,'snc','A','Settles at Schenectady'],[1690,'snc','T','Killed in the Schenectady massacre, 1690']]},
+ {n:'Arent Andriessen Bradt',g:'mcm',d:1663,s:[[1615,'fre','T','Born, Fredrikstad, Norway'],[1637,'alb','A','To Beverwyck (Albany)'],[1662,'snc','T','Among the first proprietors of Schenectady'],[1663,'snc','T','Dies']]},
+ {n:'A Mohawk woman',g:'mcm',d:1660,s:[[1620,'moh','D','Mother of Jacques Van Slyck; her name is not recorded (tradition says Ots-Toch)']]},
+ {n:'Jacques Cornelissen Van Slyck',g:'mcm',d:1690,s:[[1640,'moh','D','Born in Mohawk country, son of Cornelis Van Slyck and a Mohawk woman'],[1662,'snc','D','Interpreter and early settler of Schenectady; land held in right of his Mohawk mother'],[1690,'snc','T','Dies']]},
+ {n:'Susanna Van Slyck',g:'mcm',d:1713,s:[[1662,'snc','D','Born, Schenectady; marries Samuel Bradt'],[1713,'snc','T','Dies']]},
+ {n:'Santje (Susanna) Vrooman',g:'mcm',d:1780,s:[[1728,'sho','A','Born about 1728, probably daughter of Bartholomeus Vrooman and Susanna Bratt'],[1751,'sho','D','Children baptised at Schoharie with Hendrick Hagedoorn, 1751–67']]},
+ {n:'Eva Hagedoorn',g:'mcm',d:1830,s:[[1767,'sho','D','Christened 18 Apr 1767, Schoharie; daughter of Hendrick Hagedoorn and Santje Vrooman'],[1787,'sho','D','Marries Ludwig Becker, Schoharie, 3 Feb 1787'],[1794,'sho','D','Daughter Susanna christened']]},
+ {n:'Susanna Bratt',g:'mcm',d:1779,s:[[1704,'snc','D','Baptised 2 Jan 1704, Schenectady; marries Bartholomeus Vrooman'],[1734,'sho','D','Baptising children at Schoharie, 1734–39'],[1779,'alb','T','Dies, Albany']]},
+ {n:'John Throckmorton',g:'smi',d:1684,s:[[1610,'nch','T','A boy in Norwich, England'],[1631,'sma','A','To Salem'],[1638,'pvd','T','An original proprietor of Providence'],[1643,'thr','T','Settles Throgs Neck'],[1647,'pvd','A','Back in Providence after an attack'],[1684,'mdl','T','Dies, Middletown']]},
+ {n:'Richard Stout',g:'smi',d:1705,s:[[1615,'ntt','T','Born, Nottinghamshire'],[1643,'grs','T','Among the settlers of Gravesend'],[1665,'mdl','T','A founder of Middletown'],[1705,'mdl','T','Dies']]},
+ {n:'Penelope Stout',g:'smi',d:1715,s:[[1622,'ams','T','Said to be born in Amsterdam'],[1643,'shk','Q','Shipwrecked at Sandy Hook (legend; year uncertain)'],[1648,'grs','A','Marries Richard Stout'],[1665,'mdl','T','A founder of Middletown'],[1715,'mdl','Q','Dies (year uncertain)']]},
+ {n:'Peter Wright of Oyster Bay',g:'smi',d:1663,s:[[1612,'nfk','T','Born in Norfolk'],[1637,'sdw','A','At Sandwich, Cape Cod'],[1653,'oys','T','Settles Oyster Bay'],[1663,'oys','T','Dies']]},
+ {n:'William Rittenhouse (papermaker)',g:'smi',d:1708,s:[[1644,'mul','T','Born near Mülheim'],[1665,'ams','A','Learns papermaking in Holland'],[1688,'gtn','T','To Germantown'],[1690,'gtn','T','Builds the first paper mill in British America'],[1708,'gtn','T','Dies']]},
+ {n:'Adam Vrooman',g:'mcm',d:1730,s:[[1649,'lei','T','Born, Leiden'],[1664,'alb','T','Arrives on d’Eendracht'],[1683,'snc','T','Builds a mill at Schenectady'],[1715,'sho','T','Settles Vroomansland, Schoharie'],[1730,'sho','T','Dies on his farm']]},
+ {n:'Capt. James Ward (killed 1774)',g:'mil',d:1774,s:[[1727,'don','T','Born, Inishowen, Co. Donegal'],[1735,'aug','A','To Virginia as a child'],[1755,'bth','T','Mill and tavern near Warm Springs'],[1774,'ptp','T','Killed at Point Pleasant']]},
+ {n:'John Ward (his son)',g:'mil',d:1793,s:[[1755,'bth','T','Born on the Virginia frontier'],[1758,'scl','T','Taken by the Shawnee, aged three'],[1774,'ptp','T','Fights on the Shawnee side at Point Pleasant'],[1793,'pnt','T','Killed in a fight with militia led by his brother James']]},
+ {n:'Edwin McClain',g:'mcc',d:1884,s:[[1851,'lib','D','Born, Iowa (1860 census)'],[1860,'lib','D','Liberty Township (1860 census)'],[1875,'lib','T','Marries Alice Raines'],[1880,'lib','D','Liberty Township, with Alice and Effie (1880 census)'],[1884,'lib','T','Killed by lightning (27 Aug in the county history, 22 Aug in FamilySearch’s tree)']]},
+ {n:'David N. McMaster',g:'mcm',d:1945,s:[[1865,'alt','D','Born, Altona; son of John McMaster and Lorinda Multer (death record)'],[1919,'alt','T','President, First National Bank of Altona'],[1945,'gal','D','Dies, Galesburg (death record)']]}
+];
+P.shk=[-74.0,40.46,'Sandy Hook, New Jersey'];
+P.mdl=[-74.11,40.39,'Middletown, New Jersey'];
+P.thr=[-73.82,40.81,'Throgs Neck, the Bronx, New York'];
+P.pvd=[-71.41,41.82,'Providence, Rhode Island'];
+P.sma=[-70.89,42.52,'Salem, Massachusetts'];
+P.nch=[1.3,52.63,'Norwich, England'];
+P.ntt=[-1.04,53.0,'Burton Joyce, Nottinghamshire'];
+P.grs=[-73.97,40.6,'Gravesend, Long Island'];
+P.nfk=[0.9,52.7,'Norfolk, England'];
+P.sdw=[-70.49,41.76,'Sandwich, Massachusetts'];
+P.mul=[6.88,51.43,'Mülheim an der Ruhr, Germany'];
+P.bth=[-79.72,38.09,'Bath Co., Virginia'];
+P.ptp=[-82.13,38.84,'Point Pleasant, (West) Virginia'];
+P.scl=[-82.98,39.45,'Shawnee towns on the Scioto, Ohio'];
+P.pnt=[-83.27,39.23,'Paint Creek, Ohio'];
+P.chn=[-75.09,38.8,'Cape Henlopen, Delaware'];
+P.dai=[-4.72,55.27,'Dailly, Ayrshire, Scotland'];
+P.sor=[-4.30,55.51,'Sorn, Ayrshire, Scotland'];
+P.wny=[-74.75,42.59,'Worcester, Otsego Co., New York'];
+P.ful=[9.68,50.55,'Fulda, Hesse'];
+P.sho=[-74.31,42.67,'Schoharie, New York'];
+P.pal=[8.2,49.4,'The Palatinate'];
+P.ams=[4.90,52.37,'Amsterdam'];
+P.lei=[4.49,52.16,'Leiden, Holland'];
+P.fre=[10.93,59.22,'Fredrikstad, Norway'];
+P.snc=[-73.94,42.81,'Schenectady, New York'];
+P.moh=[-74.57,42.90,'Mohawk country (Canajoharie)'];
+P.alt=[-90.16,41.11,'Altona, Knox Co., Illinois'];
+P.stl=[-90.20,38.63,'St. Louis, Missouri'];
+P.som=[-79.08,40.0,'Somerset Co., Pennsylvania'];
+P.mayo=[-9.3,53.85,'Co. Mayo, Ireland'];
+
+
+P.dav=[-90.58,41.53,'Davenport, Iowa'];
+P.day=[-84.19,39.76,'Dayton, Ohio'];
+P.wap=[-92.42,41.15,'Richland Township, Wapello Co., Iowa'];
+P.vbu=[-91.95,40.75,'Van Buren Co., Iowa Territory'];
+
+const HIGHLIGHTS=[
+ {y:1813,p:'wny',t:'A sergeant in 1812',b:'The index to War of 1812 pensions lists Joseph Multer, with his wife Susan, as a sergeant in Capt. David Pengield’s company of New York militia (the captain’s name may be misread). New York was on the front line of that war, along the Canadian border. The family tree says Joseph was born in Fulda, Germany, but the 1850 census says New York.'},
+
+ {y:1637,p:'alb',t:'A Norwegian in New Netherland',b:'Arent Andriessen Bradt was born about 1615 in Fredrikstad, Norway. Around 1637 he came to Rensselaerswyck, the Dutch patroonship around Fort Orange, now Albany. A surprising number of the Dutch colony’s settlers were Norwegian. The fur trade with the Mohawk was the reason the colony existed.'},
+ {y:1640,p:'moh',t:'A Mohawk grandmother',b:'About 1640 Jacques Van Slyck was born in Mohawk country to Cornelis Van Slyck, a Dutch trader, and a Mohawk woman whose name has not survived. Jacques grew up between both worlds and worked as an interpreter. Later he held land at Schenectady “in right of his mother who was a Mohawk woman”. She is a direct ancestor, and every link to her but one is documented.'},
+ {y:1662,p:'snc',t:'Founding Schenectady',b:'In 1661–62 a small group of Dutch families bought the “Great Flats” on the Mohawk River from the Mohawk and founded Schenectady. Arent Bradt was among the first proprietors, and Jacques Van Slyck and the Vroomans settled there too. Over the next generations these families married into each other many times.'},
+ {y:1683,p:'chp',t:'Penn’s Holy Experiment',b:'In 1681 William Penn received a charter for Pennsylvania as a haven for Quakers, and ships arrived from 1682. The Woodward (Cheshire), Stanfield (Lancashire), Bayly (Wiltshire) and Bentley ancestors were among the first wave of English Quaker settlers in Chester County. Ann Short, who married Joel Bayly, is generally accepted as a passenger on Penn’s own ship, the Welcome. Quaker meeting records are unusually detailed, so these lines can be followed closely.'},
+ {y:1690,p:'snc',t:'The Schenectady massacre',b:'On the night of 8–9 February 1690, during King William’s War, French and allied Native raiders from Canada came through the snow and burned Schenectady. About sixty people were killed. Among the dead was Hendrick Meese Vrooman, one of the town’s founders, born in Leiden in 1618. His son Adam, a direct ancestor, saved his own life by defending his house, but his wife and baby were killed and two of his sons were carried off to Canada. In 1697 he travelled there to seek their release.'},
+ {y:1710,p:'sho',t:'The Palatines',b:'In 1709 thousands of Germans fled war and a brutal winter in the Rhineland Palatinate for London. In 1710 about 2,400 were shipped to New York to make tar for the Royal Navy. The scheme failed, and many walked off to the Schoharie valley in 1712–13. Johann Henrich Mattice was one of them, and his descendants married into the Schoharie Vroomans.'},
+ {y:1740,p:'ypa',t:'The Pennsylvania Dutch',b:'From the 1720s German-speaking emigrants poured through Philadelphia. Rudolph Brown came from Alsace, Johannes Schleiffer from the canton of Bern, and Marcus Bigler from Alsace. They settled York County and Frederick County, Maryland, the heartland of the “Pennsylvania Dutch”. “Dutch” here comes from Deutsch, German.'},
+ {y:1805,p:'urb',t:'Over the mountains to Ohio',b:'The 1795 Treaty of Greenville opened most of Ohio to settlers. The Miller, Evans, Richards and Powell ancestors came over the mountains from Maryland, Virginia and Kentucky to Champaign County, where Urbana was laid out in 1805. Its founder was Col. William Ward, brother of Elizabeth Ward, a direct ancestor. His grandson, the sculptor John Quincy Adams Ward, made the George Washington on the steps of Federal Hall on Wall Street. William John Richards later helped build Urbana’s Baptist church. Florence Mae Miller, a direct ancestor, was born there in 1878.'},
+ {y:1845,p:'wur',t:'The hungry forties',b:'Crop failures in the mid-1840s hit the small farms of Württemberg hard. George (Johann G.) Huber brought his children from near Nagold to Greenville, Ohio, around 1845. His wife died there in 1846. His daughter Christina, born in Württemberg in 1843, later married John Snouse, whose family had come from Saxony.'},
+ {y:1852,p:'sor',t:'From Ayrshire to Illinois',b:'John McMaster left Sorn, in the Ayrshire hills, for America in 1852, and his parents followed. He married Lorinda Multer in Knox County, Illinois, in 1861 and farmed in Walnut Grove Township. Their 1870 household included two Swedish farmhands. Nearby Bishop Hill had been founded in 1846 by Swedish religious dissenters, and Knox County became very Swedish.'},
+ {y:1853,p:'slc',t:'To Zion',b:'Thomas Tully, born in Ireland in 1811, was in St. Louis in 1850, the great staging point for Latter-day Saint emigrants. He crossed the plains to Salt Lake City, settled by the Mormon pioneers only six years before. A Salt Lake County death record shows he died there on 13 November 1853. His wife Margaret and their younger children stayed in Iowa, where his daughter Catherine married John Smith of County Tyrone.'},
+ {y:1855,p:'lib',t:'Prairie farms',b:'Iowa became a state in 1846, and cheap prairie land drew families from Pennsylvania and Ohio. The Ashmeads came from Pike Run, Pennsylvania, and the McClains from Clermont County, Ohio, both to Libertyville in Jefferson County. They stayed there for a century. Effie Mary McClain was born there in 1876 and lived to be 99.'},
+ {y:1861,p:'alt',t:'Lincoln’s Knox County',b:'In October 1858 Abraham Lincoln and Stephen Douglas held one of their famous debates at Knox College in Galesburg. Galesburg was an abolitionist town and a stop on the Underground Railroad. In 1861, as the Civil War began, John McMaster married Lorinda Multer in Knox County. Four branches of the family eventually ended up around Galesburg.'},
+ {y:1934,p:'spo',t:'A Depression baby',b:'Thomas W. Snouse was born around 1933–34, in the depths of the Great Depression. The 1940 and 1950 censuses say Ohio, where his grandfather Harry was living. The family tree says Illinois, and his parents were in Henderson Township, Knox County, Illinois by April 1935. They were still farming there in 1950. It’s a nice coincidence that the township shares its name with the Hendersons of the other map.'},
+ {y:1976,p:'prv',t:'A long life',b:'Effie Mary (McClain) Ashmead was born in Libertyville, Iowa, in March 1876, a few months before the Battle of the Little Bighorn. She died in Prineville, Oregon, on 15 March 1976, one day short of her 100th birthday and seven years after the Moon landing.'},
+ {y:1643,p:'thr',t:'Throgs Neck',b:'In 1643 John Throckmorton, a direct ancestor, settled with several dozen others on a point of land in what is now the Bronx. He had been one of the twelve original proprietors of Providence with Roger Williams. An attack during the Dutch governor’s war drove them out, but his name stuck: the place is Throgs Neck.'},
+ {y:1648,p:'shk',t:'Penelope’s shipwreck',b:'Penelope Stout, a direct ancestor, is a New Jersey folk heroine. The story, first printed in 1765, says her ship was wrecked off Sandy Hook in the 1640s, that she was attacked and left for dead, and that an elderly Lenape man found her and nursed her back to health. She married Richard Stout, and in 1665 they were among the founders of Middletown. The settlement is on record. The shipwreck is legend.'},
+ {y:1653,p:'oys',t:'Oyster Bay and the Quaker sisters',b:'Peter Wright, a direct ancestor, settled Oyster Bay in 1653 and is sometimes called its founder. Three of his daughters went to Puritan Boston to protest the persecution of Quakers. A family account says Mary and Hannah were among 27 Quakers released from custody there in 1661, and that Lydia was brought before the court in 1677. Their brother Adam was a direct ancestor.'},
+ {y:1680,p:'snc',t:'Hilletie, the interpreter',b:'In 1680 the Dutch traveller Jasper Danckaerts met Hilletie Van Slyck, sister of Jacques. Like him she was the child of a Mohawk mother and a Dutch father, and she worked as an interpreter. The Mohawk had granted her land at Niskayuna in 1667. Danckaerts wrote down her account of her life, one of the few from a Mohawk woman of that time.'},
+ {y:1688,p:'gtn',t:'America’s first paper mill',b:'William Rittenhouse, a direct ancestor, came to Germantown in 1688. In 1690 he and his partners built the first paper mill in British America, and he was the first Mennonite minister there. The site is preserved as Historic RittenhouseTown. His great-grandson David Rittenhouse, the astronomer, became the first director of the US Mint. Rittenhouse Square is named after David.'},
+ {y:1758,p:'bth',t:'Taken by the Shawnee',b:'In 1758 three-year-old John Ward followed his father and his brother William to the family mill in the Virginia mountains. Shawnee scouts watching from the woods carried him off. He was raised as one of them and married among them. His father was Capt. James Ward, a direct ancestor.'},
+ {y:1769,p:'chn',t:'The transit of Venus',b:'On 3 June 1769 Joel Baily helped observe the planet Venus crossing the Sun from Cape Henlopen, part of a worldwide effort to measure the solar system. A surveyor and gunsmith, he had already worked on the Mason–Dixon line. He was a nephew of Thomas Bailey. His fellow observer at home near Philadelphia was David Rittenhouse, a cousin on another branch of the family.'},
+ {y:1774,p:'ptp',t:'Father against son',b:'On 10 October 1774 Virginia militia fought the Shawnee and their allies at Point Pleasant on the Ohio. Capt. James Ward was killed. His sons were on both sides: William took over the company, while John, taken as a child, fought with the Shawnee. In 1793 John himself was killed in a fight with militia that included his younger brother, also named James.'},
+ {y:1864,p:'lib',t:'In Union blue',b:'On 6 October 1864 “Ashmead, H.” and his brother Clarkson are listed as joining the 13th Iowa Infantry, which marched to the sea with Sherman. H. is probably Hiram, a direct ancestor. In Ohio a John Snouse served in the 44th Infantry and later belonged to the veterans’ post at Greenville. He is probably a direct ancestor too, born in Saxony. Hiram’s service is now better supported: an Iowa veterans’ grave registration and a pension card both name him.'},
+ {y:1884,p:'lib',t:'A bolt of lightning',b:'On 27 August 1884 Edwin McClain, a direct ancestor, was killed by lightning on his farm in Jefferson County, Iowa. He was about 33. His daughter Effie was eight, and she would outlive him by more than ninety years.'},
+ {y:1932,p:'alt',t:'A banker in the Depression',b:'David N. McMaster, brother of Mary E. McMaster, was president of the First National Bank of Altona from 1919. In 1932 it was wound up and replaced by the Altona National Bank, which he led until 1935. Thousands of small-town banks failed in those years.'}
+];
+
+const CIT={"Michael Snouse (Schnaus)":{"p":"https://ancestors.familysearch.org/en/LT75-C5M","r":{"1795":"~MCGX-8K8","1860":"~MCGX-8K8"}},"Andreas Huber":{"r":{}},"George (Johann G.) Huber":{"r":{"1808":"~MCGX-ZW9","1860":"~MCGX-ZW9"}},"Christopher Huber":{"r":{}},"Christina K. Huber":{"p":"https://ancestors.familysearch.org/en/LT75-42B","r":{"1843":"~MCGX-ZW9","1860":"~MCGX-ZW9","1870":"~MDJG-G9P","1880":"~MD2M-JTJ"}},"John Snouse":{"p":"https://ancestors.familysearch.org/en/LT75-KSS","r":{"1842":"~MCGX-8K6","1860":"~MCGX-8K6","1870":"~MDJG-G9P","1880":"~MD2M-JTN","1910":"~ML8L-R2Z","1921":"~X8P6-SVY"}},"Harry William Snouse":{"p":"https://ancestors.familysearch.org/en/MWSV-YMM","r":{"1874":"~MD2M-JT2","1900":"~MMZW-WWS","1910":"~MKXD-QRN","1920":"~MJ4P-N9S","1930":"~XMKM-94X","1935":"~KW6H-YJR","1940":"~KW6H-YJR"}},"Harold Clifton Snouse":{"p":"https://ancestors.familysearch.org/en/L8WK-HCS","r":{"1907":"~MKXD-QR2","1910":"~MKXD-QR2","1920":"~MJ4P-N94","1934":"~6X15-PFNF","1935":"~KWHT-RWB","1940":"~KWHT-RWB","1950":"~6X15-PFNF"}},"Thomas W. Snouse":{"r":{"1934":"~6X15-PFNF","1935":"~KWHT-RWB","1950":"~6X15-PFNF"}},"Mary M. Thompson":{"p":"https://ancestors.familysearch.org/en/GGJC-GCS","r":{"1907":"~MJ4G-NSZ","1920":"~MJ4G-NSZ","1940":"~KWHT-RW1","1950":"~6X15-PFNX","2002":"~JP58-6NY"}},"Marcus Bigler":{"p":"https://ancestors.familysearch.org/en/L17Y-97Q","r":{}},"Johannes Peter Schleiffer":{"p":"https://ancestors.familysearch.org/en/G2P5-J7M","r":{}},"Rudolph Brown":{"p":"https://ancestors.familysearch.org/en/KZT2-3VB","r":{}},"Edward Strode":{"p":"https://ancestors.familysearch.org/en/G1XC-WRP","r":{"1691":"~J7NR-GNR"}},"Elizabeth Ann Hamilton":{"p":"https://ancestors.familysearch.org/en/LHW6-88C","r":{"1698":"~X1R3-QP1"}},"James Ward (the immigrant)":{"p":"https://ancestors.familysearch.org/en/L69S-NYX","r":{}},"Jacob Yeazel":{"p":"https://ancestors.familysearch.org/en/LZVM-ZMD","r":{"1810":"~XH2H-TDM"}},"Joseph Miller":{"p":"https://ancestors.familysearch.org/en/KLGC-6YB","r":{}},"Isaac Evans Jr.":{"p":"https://ancestors.familysearch.org/en/LW19-ZT6","r":{}},"Andrew Richards":{"p":"https://ancestors.familysearch.org/en/99JD-744","r":{"1820":"~XHL3-W54"}},"Henry Powell":{"p":"https://ancestors.familysearch.org/en/LZD2-DTP","r":{"1796":"~MCGD-2HS","1850":"~MX3K-X8V"}},"Martin Oliver Miller":{"p":"https://ancestors.familysearch.org/en/9K6D-Z3X","r":{"1822":"~MHZL-QQY","1850":"~MX3V-ZBN","1860":"~MHZL-QQY","1900":"~M3DN-G22"}},"John Adam Miller":{"p":"https://ancestors.familysearch.org/en/L8WK-HH2","r":{"1860":"~MCGD-K1Q","1880":"~MZ1J-SF6","1900":"~MMZW-W7T"}},"Florence Mae Miller":{"p":"https://ancestors.familysearch.org/en/L8WK-HHJ","r":{"1878":"~MZ1J-SFF","1900":"~MMZW-WW9","1910":"~MKXD-QRN","1920":"~MJ4P-N93","1930":"~XMKM-94F","1940":"~KW6H-YJT"}},"Richard Woodward":{"p":"https://ancestors.familysearch.org/en/KN42-41S","r":{"1639":"~F3G9-W31"}},"Francis Stanfield":{"p":"https://ancestors.familysearch.org/en/LDZG-CYY","r":{}},"John Bentley":{"p":"https://ancestors.familysearch.org/en/LHGC-BWD","r":{"1656":"~J7HL-F3P"}},"Joel Bayly":{"p":"https://ancestors.familysearch.org/en/LVWM-GZH","r":{}},"Joseph Hayes":{"p":"https://ancestors.familysearch.org/en/LJBP-Y38","r":{}},"John Millison":{"p":"https://ancestors.familysearch.org/en/LJ16-JW6","r":{}},"Hugh Cowan":{"p":"https://ancestors.familysearch.org/en/LZLL-HL3","r":{}},"John Henderson (Scotland)":{"p":"https://ancestors.familysearch.org/en/GC4J-1BJ","r":{}},"James Milleson":{"p":"https://ancestors.familysearch.org/en/LHGG-N7F","r":{"1790":"~XHKJ-QKQ","1800":"~XHRX-DNB"}},"Capt. John Ashmead":{"r":{}},"Samuel Ashmead":{"p":"https://ancestors.familysearch.org/en/LY6C-GN8","r":{"1800":"~M4Z7-685","1840":"~XHTV-VJF","1850":"~M4Z7-685","1860":"~M82D-PS8"}},"Abigail Milleson":{"p":"https://ancestors.familysearch.org/en/2733-X4N","r":{"1796":"~M4Z7-68R","1850":"~M4Z7-68R","1860":"~M82D-PSD","1870":"~MDVC-1JY"}},"Samuel W. Morrison":{"p":"https://ancestors.familysearch.org/en/L132-MCW","r":{}},"Hiram Ashmead":{"p":"https://ancestors.familysearch.org/en/2733-XXP","r":{"1835":"~Q2QV-ZTKW","1850":"~M4Z7-68B","1880":"~MD2G-T5P","1907":"~K6W2-3FT","1918":"~Q2QV-ZTKW"}},"Elizabeth Ellen Morrison":{"p":"https://ancestors.familysearch.org/en/K4VG-V3S","r":{"1839":"~M929-64L","1850":"~MZ46-NBC","1880":"~MD2G-T55","1920":"~M817-9V1"}},"Jesse Preston Ashmead":{"p":"https://ancestors.familysearch.org/en/KC2W-T33","r":{"1871":"~MD2G-T5Y","1910":"~MGMC-WGW","1920":"~MDM5-SJ3","1930":"~XMKW-B4G","1940":"~KMYD-WRL"}},"Israel Delmar Ashmead":{"p":"https://ancestors.familysearch.org/en/9XYB-2R6","r":{"1908":"~Q24X-HYWV","1910":"~MGMC-WGX","1920":"~MDM5-SJW","1930":"~XMKW-B4P","1933":"~QPW6-D8F2","1940":"~KWHT-4LW","1950":"~6X16-TTKT"}},"Betty Ashmeade":{"r":{"1933":"~QPW6-D8F2","1940":"~KWHT-4LW"}},"Andrew McClain":{"p":"https://ancestors.familysearch.org/en/KFDW-G8C","r":{}},"Benjamin Betterton":{"p":"https://ancestors.familysearch.org/en/KFRP-87Q","r":{}},"Archibald Gardner":{"p":"https://ancestors.familysearch.org/en/LHFC-VJD","r":{"1721":"~VQWL-2ML"}},"John Erskine":{"p":"https://ancestors.familysearch.org/en/LJ5L-15J","r":{"1764":"~M4HZ-639","1850":"~M4HZ-639"}},"Peter McClain":{"p":"https://ancestors.familysearch.org/en/2Q1X-9KR","r":{}},"William Gardner Betterton":{"p":"https://ancestors.familysearch.org/en/2SZF-GKF","r":{"1801":"~MZ4V-SHQ","1830":"~XHPK-67R","1840":"~XHTG-44Q","1850":"~MZ4V-SHQ"}},"Joseph Benson McClain":{"p":"https://ancestors.familysearch.org/en/LYSK-8CN","r":{"1819":"~M82D-RD2","1860":"~M82D-RD2","1880":"~MD2G-P16"}},"Alice Mary Raines":{"p":"https://ancestors.familysearch.org/en/2SHZ-2JT","r":{"1853":"~M929-NY5","1860":"~M82D-RD5","1880":"~MD2G-P1L","1910":"~MGMC-7DD"}},"Effie Mary McClain":{"p":"https://ancestors.familysearch.org/en/2SZH-8DR","r":{"1876":"~MD2G-P1G","1910":"~MGMC-WG4","1920":"~MDM5-SJQ","1930":"~XMKW-B4L"}},"Dr. William Edward Tully":{"p":"https://ancestors.familysearch.org/en/K89B-TJR","r":{}},"Thomas Tully":{"p":"https://ancestors.familysearch.org/en/GSQ5-ZKL","r":{"1811":"~NQHK-KXR","1835":"~MDZL-18M","1850":"~MDZL-1ZB","1853":"~NQHK-KXR"}},"John J. Smith":{"p":"https://ancestors.familysearch.org/en/27GX-8KZ","r":{"1820":"~M82B-MG4","1860":"~M82B-MG4","1880":"~MDL2-9WD"}},"Catherine Tulley":{"p":"https://ancestors.familysearch.org/en/27GX-82S","r":{"1835":"~M82B-MGH","1850":"~MDZL-18M","1860":"~M82B-MGH","1880":"~MDL2-9W6"}},"Rebeckah van den Bogart":{"p":"https://ancestors.familysearch.org/en/L41B-LK5","r":{}},"Peter Wright of Virginia":{"p":"https://ancestors.familysearch.org/en/LHK4-JS8","r":{}},"William Rittenhouse":{"p":"https://ancestors.familysearch.org/en/L6N9-Q3T","r":{}},"Horace Clark Godown":{"p":"https://ancestors.familysearch.org/en/L4HQ-SQV","r":{"1818":"~M82B-FJ9","1850":"~MXSB-GDJ","1860":"~M82B-FJ9","1880":"~MF53-6C1","1900":"~MMTR-BVH"}},"Ruben S. Runells":{"p":"https://ancestors.familysearch.org/en/LKS6-BF9","r":{"1848":"~M9LG-Y6R","1900":"~M9LG-Y6R","1920":"~MDMP-6VN","1930":"~XMK4-3TG"}},"William Henry Smith":{"p":"https://ancestors.familysearch.org/en/LZ6N-PBC","r":{"1857":"~M82B-MG8","1880":"~MDL2-9WS","1900":"~M9LG-T31","1910":"~MG9J-YNY"}},"Ernest Elmer Smith":{"p":"https://ancestors.familysearch.org/en/MTPP-4WV","r":{"1879":"~MDL2-9WQ","1910":"~MKDR-VR1","1920":"~MDMP-6VD","1930":"~XMKW-RNK"}},"Elnora Pearl Runnells":{"p":"https://ancestors.familysearch.org/en/LKS9-CB2","r":{"1882":"~M9LG-YXM","1910":"~MKDR-VTS","1920":"~MDMP-6V6","1930":"~XMKW-RN2","1940":"~KWHT-4LC","1950":"~6X16-TTK5"}},"Gertrude L. Smith":{"p":"https://ancestors.familysearch.org/en/LBPM-12J","r":{"1909":"~MKDR-VT9","1920":"~MDMP-6VF","1933":"~QPW6-D8F2","1940":"~KWHT-4L4","1950":"~6X16-TTKY"}},"William A. Thompson":{"r":{"1879":"~KFV1-ZN4","1904":"~KFV1-ZN4"}},"Mary E. McMaster":{"r":{"1877":"~KFV1-ZN4","1904":"~KFV1-ZN4"}},"John McMaster Sr.":{"p":"https://ancestors.familysearch.org/en/LQRF-2P4","r":{"1796":"~XYW5-R2N","1841":"~VYZW-LPL","1880":"~MXV7-BDQ"}},"Ann Struthers":{"p":"https://ancestors.familysearch.org/en/KNNB-XTV","r":{"1802":"~XTKJ-RDZ","1841":"~VYZW-LPG","1870":"~M64T-5BH"}},"John McMaster":{"p":"https://ancestors.familysearch.org/en/KFT1-TDC","r":{"1827":"~VYZW-LP5","1841":"~VYZW-LP5","1852":"~MSWR-3HG","1861":"~KFL8-JB1","1870":"~M64Y-NNT","1900":"~MSWR-3HG"}},"Lorinda Helen Multer":{"p":"https://ancestors.familysearch.org/en/LHXZ-C6C","r":{"1838":"~MSWR-3HP","1850":"~MC17-QK6","1855":"~K6QF-PSY","1860":"~MC4S-716","1861":"~KFL8-JB1","1870":"~M64Y-NNY"}},"Joseph Multer":{"p":"https://ancestors.familysearch.org/en/KZLK-M45","r":{"1787":"~MC17-QKW","1813":"~X8ZS-JTL","1850":"~MC17-QKW","1855":"~K6QF-PSG"}},"Susanna Becker":{"p":"https://ancestors.familysearch.org/en/LK3T-V2C","r":{"1794":"~V2CQ-VMR","1850":"~MC17-QK4","1870":"~M8VT-8LR"}},"Johann Henrich Mattice":{"p":"https://ancestors.familysearch.org/en/LCMG-5ZW","r":{}},"Jan Jurians Becker":{"p":"https://ancestors.familysearch.org/en/PJSM-LRG","r":{}},"Hendrick Meese Vrooman":{"p":"https://ancestors.familysearch.org/en/LXQF-RPT","r":{}},"Arent Andriessen Bradt":{"p":"https://ancestors.familysearch.org/en/LBBK-WRJ","r":{}},"A Mohawk woman":{"r":{"1620":"https://schenectadyhistory.org/resources/patent/vanslyck_c.html"}},"Jacques Cornelissen Van Slyck":{"p":"https://ancestors.familysearch.org/en/LY3S-BC4","r":{"1640":"https://schenectadyhistory.org/resources/patent/vanslyck_c.html","1662":"https://schenectadyhistory.org/resources/patent/vanslyck_c.html"}},"Susanna Van Slyck":{"p":"https://ancestors.familysearch.org/en/LZDZ-XDL","r":{"1662":"https://www.schenectadyhistory.org/resources/patent/bratt_s.html"}},"Santje (Susanna) Vrooman":{"p":"https://ancestors.familysearch.org/en/M5SZ-T1Q","r":{"1751":"~FDYQ-N47"}},"Eva Hagedoorn":{"p":"https://ancestors.familysearch.org/en/KT4W-M3Y","r":{"1787":"~F63H-J2K","1794":"~V2CQ-VMR"}},"Susanna Bratt":{"p":"https://ancestors.familysearch.org/en/LSSS-XVM","r":{"1704":"https://www.schenectadyhistory.org/resources/patent/bratt_s.html","1734":"~V2CQ-6W1"}},"John Throckmorton":{"p":"https://en.wikipedia.org/wiki/John_Throckmorton_(settler)","r":{}},"Richard Stout":{"p":"https://en.wikipedia.org/wiki/Penelope_Stout","r":{}},"Penelope Stout":{"p":"https://en.wikipedia.org/wiki/Penelope_Stout","r":{}},"Peter Wright of Oyster Bay":{"p":"https://www.ahgscov.org/peter-wright/","r":{}},"William Rittenhouse (papermaker)":{"p":"https://en.wikipedia.org/wiki/William_Rittenhouse","r":{}},"Adam Vrooman":{"p":"https://ancestors.familysearch.org/en/LZZH-4Z5","r":{}},"Capt. James Ward (killed 1774)":{"p":"https://ancestors.familysearch.org/en/LZDL-MV3","r":{}},"John Ward (his son)":{"p":"https://en.wikipedia.org/wiki/James_Ward_(frontiersman)","r":{}},"Edwin McClain":{"p":"https://ancestors.familysearch.org/en/2SCH-MKY","r":{"1851":"~M82D-RDG","1860":"~M82D-RDG","1880":"~MD2G-P12"}},"David N. McMaster":{"r":{"1865":"~NQ3T-SMQ","1945":"~NQ3T-SMQ"}}};
+const SRC={"A Norwegian in New Netherland":[["His FamilySearch page","https://ancestors.familysearch.org/en/LBBK-WRJ"]],"A Mohawk grandmother":[["Schenectady Patent: Van Slyck","https://schenectadyhistory.org/resources/patent/vanslyck_c.html"],["Bruchac on Ots-Toch","https://joebruchac.com/ots-toch"]],"Founding Schenectady":[["Schenectady Patent: Van Slyck","https://schenectadyhistory.org/resources/patent/vanslyck_c.html"]],"The Schenectady massacre":[["Schenectady massacre","https://en.wikipedia.org/wiki/Schenectady_massacre"],["Adam Vrooman on WikiTree","https://www.wikitree.com/wiki/Vrooman-350"]],"America’s first paper mill":[["William Rittenhouse","https://en.wikipedia.org/wiki/William_Rittenhouse"]],"Throgs Neck":[["John Throckmorton","https://en.wikipedia.org/wiki/John_Throckmorton_(settler)"]],"Penelope’s shipwreck":[["Penelope Stout","https://en.wikipedia.org/wiki/Penelope_Stout"]],"Oyster Bay and the Quaker sisters":[["Alleghany Highlands Genealogical Society","https://www.ahgscov.org/peter-wright/"]],"Hilletie, the interpreter":[["Schenectady Patent: Van Olinda","https://schenectadyhistory.org/resources/patent/vanolinda.html"],["New-York Historical Society","https://wams.nyhistory.org/?p=53750"]],"Taken by the Shawnee":[["James Ward on WikiTree","https://www.wikitree.com/wiki/Ward-3512"]],"Father against son":[["Battle of Point Pleasant","https://en.wikipedia.org/wiki/Battle_of_Point_Pleasant"],["James Ward the younger","https://en.wikipedia.org/wiki/James_Ward_(frontiersman)"]],"The transit of Venus":[["Joel Baily","https://en.wikipedia.org/wiki/Joel_Bailey_(surveyor)"]],"Over the mountains to Ohio":[["William Ward","https://en.wikipedia.org/wiki/William_Ward_(frontiersman)"],["J. Q. A. Ward","https://en.wikipedia.org/wiki/John_Quincy_Adams_Ward"],["Champaign Co. history","https://archive.org/details/centennialbiogra00lew"]],"The hungry forties":[["1860 census: Huber","https://www.familysearch.org/ark:/61903/1:1:MCGX-ZW9"],["1860 census: Snouse","https://www.familysearch.org/ark:/61903/1:1:MCGX-8K6"]],"From Ayrshire to Illinois":[["1841 census","https://www.familysearch.org/ark:/61903/1:1:VYZW-LP5"],["1900 census","https://www.familysearch.org/ark:/61903/1:1:MSWR-3HG"],["1861 marriage","https://www.familysearch.org/ark:/61903/1:1:KFL8-JB1"]],"To Zion":[["1850 census, St. Louis","https://www.familysearch.org/ark:/61903/1:1:MDZL-1ZB"],["Utah death record","https://www.familysearch.org/ark:/61903/1:1:NQHK-KXR"]],"Prairie farms":[["1860 census","https://www.familysearch.org/ark:/61903/1:1:M82D-PS8"],["Effie, 1880","https://www.familysearch.org/ark:/61903/1:1:MD2G-P1G"]],"Lincoln’s Knox County":[["1861 marriage","https://www.familysearch.org/ark:/61903/1:1:KFL8-JB1"]],"In Union blue":[["Hiram’s pension card","https://www.familysearch.org/ark:/61903/1:1:K6W2-3FT"],["Grave registration","https://www.familysearch.org/ark:/61903/1:1:Q2QV-ZTKW"],["Jefferson Co. history 1879","https://archive.org/details/historyofjeffers01west"],["John Snouse’s death record","https://www.familysearch.org/ark:/61903/1:1:X8P6-SVY"]],"A bolt of lightning":[["Jefferson Co. history","https://archive.org/details/historyjefferso00fultgoog"],["1880 census","https://www.familysearch.org/ark:/61903/1:1:MD2G-P12"]],"A sergeant in 1812":[["Pension index","https://www.familysearch.org/ark:/61903/1:1:X8ZS-JTL"],["1850 census","https://www.familysearch.org/ark:/61903/1:1:MC17-QKW"]],"A Depression baby":[["1940 census","https://www.familysearch.org/ark:/61903/1:1:KWHT-RWB"],["1950 census","https://www.familysearch.org/ark:/61903/1:1:6X15-PFNF"]],"A long life":[["1880 census","https://www.familysearch.org/ark:/61903/1:1:MD2G-P1G"]],"A banker in the Depression":[["National Bank Lookup","https://banklookup.spmc.org/banker/44426?bank=11331"],["Death record","https://www.familysearch.org/ark:/61903/1:1:NQ3T-SMQ"]]};
+const ARK='https://www.familysearch.org/ark:/61903/1:1:';
+const esc=u=>u.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+
+const W=1000,H=620, Y0=1610, Y1=2020;
+const svg=d3.select('#map');
+const proj=d3.geoNaturalEarth1().rotate([52,0]).fitExtent([[14,14],[W-14,H-14]],{type:'MultiPoint',coordinates:[[-127,15],[22,63],[-127,63],[22,15]]});
+const path=d3.geoPath(proj);
+const root=svg.append('g');
+root.append('path').attr('d',path({type:'Sphere'})).attr('fill','var(--ocean)');
+root.append('path').attr('d',path(d3.geoGraticule10())).attr('fill','none').attr('stroke','var(--border)').attr('stroke-opacity',.25).attr('stroke-width',.5).attr('vector-effect','non-scaling-stroke');
+const landG=root.append('g'), stateG=root.append('g');
+const trailG=root.append('g'), hlG=root.append('g'), dotG=root.append('g'), labG=root.append('g');
+const hidden=new Set();
+
+function curve(a,b){const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2,dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1;const k=Math.min(.22,40/L+.08);const c=[mx-dy*k,my+dx*k];const pts=[];for(let i=0;i<=24;i++){const t=i/24,u=1-t;pts.push([u*u*a[0]+2*u*t*c[0]+t*t*b[0],u*u*a[1]+2*u*t*c[1]+t*t*b[1]]);}return pts;}
+T.forEach((t,i)=>{
+  t.id='t'+i; t.pts=t.s.map(s=>proj([P[s[1]][0],P[s[1]][1]]));
+  t.segs=[]; for(let k=0;k<t.s.length-1;k++){t.segs.push({pts:curve(t.pts[k],t.pts[k+1]),conf:t.s[k+1][2]});}
+  t.start=t.s[0][0]; t.end=t.d??t.s[t.s.length-1][0];
+  const g=trailG.append('g');
+  t.segEls=t.segs.map(sg=>g.append('path').attr('fill','none').attr('stroke',`var(${G[t.g][1]})`).attr('vector-effect','non-scaling-stroke')
+     .attr('stroke-width',sg.conf==='D'?2.4:sg.conf==='T'?1.3:1.5).attr('stroke-dasharray',sg.conf==='A'?'5 3':sg.conf==='Q'?'1.5 3':null).attr('stroke-linecap','round'));
+  t.dot=dotG.append('circle').attr('fill',`var(${G[t.g][1]})`).attr('stroke','var(--ocean)').attr('stroke-width',1).attr('vector-effect','non-scaling-stroke');
+  t.lab=labG.append('text').attr('fill','var(--ink)').attr('font-family','IBM Plex Sans, system-ui, sans-serif').attr('paint-order','stroke').attr('stroke','var(--ocean)').attr('stroke-linejoin','round').text(t.n);
+});
+const lineFn=d3.line();
+
+// highlights
+const HL=(typeof HIGHLIGHTS!=='undefined'?HIGHLIGHTS:[]).filter(h=>P[h.p]).sort((a,b)=>a.y-b.y);
+HL.forEach(h=>{h.pt=proj([P[h.p][0],P[h.p][1]]);});
+const ring=hlG.append('circle').attr('fill','none').attr('stroke','var(--hl)').attr('stroke-width',2).attr('vector-effect','non-scaling-stroke').attr('opacity',0);
+const ring2=hlG.append('circle').attr('fill','var(--hl)').attr('opacity',0);
+const card=document.getElementById('hl'), hlY=document.getElementById('hlYear'), hlT=document.getElementById('hlTitle'), hlB=document.getElementById('hlBody'), hlP=document.getElementById('hlPlace'), hlGo=document.getElementById('hlGo'), hlN=document.getElementById('hlNum');
+const pauseBox=document.getElementById('pauseHL');
+let activeHL=null, resumeAfter=false, cooldownUntil=0; const pending=[];
+function showHL(h,resume){activeHL=h; resumeAfter=!!resume; hlY.textContent=h.y; hlT.textContent=h.t; hlB.textContent=h.b; document.getElementById('hlSrc').innerHTML=(SRC[h.t]||[]).map(([l,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${l}</a>`).join(''); hlP.textContent=P[h.p][2]; hlN.textContent=`Story ${HL.indexOf(h)+1} of ${HL.length}`; hlGo.textContent=resume?'Continue':'Close'; card.hidden=false; hlGo.focus({preventScroll:true});}
+function hideHL(){const r=resumeAfter; activeHL=null; card.hidden=true; ring.attr('opacity',0); ring2.attr('opacity',0); if(r){playing=true; playBtn.textContent='Pause'; last=performance.now(); cooldownUntil=performance.now()+3500;}}
+hlGo.addEventListener('click',hideHL);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&activeHL) hideHL();});
+
+// events
+const EV=[];T.forEach(t=>t.s.forEach(s=>{if(s[3])EV.push({y:s[0],t,place:P[s[1]][2],note:s[3]})}));
+HL.forEach(h=>EV.push({y:h.y,h}));
+EV.sort((a,b)=>a.y-b.y||(a.h?-1:1));
+const log=document.getElementById('log');
+EV.forEach(e=>{const w=document.createElement('div');w.className='ev';const b=document.createElement('button');b.type='button';
+  if(e.h){w.classList.add('star');b.innerHTML=`<span class="y">${e.y}</span><span><span class="who">★ ${e.h.t}</span> <span style="color:var(--muted)">${P[e.h.p][2]}</span></span>`;b.addEventListener('click',()=>{playing=false;playBtn.textContent='Play';setYear(e.y);showHL(e.h,false);});}
+  else{b.innerHTML=`<span class="y">${e.y}</span><span><span class="who" style="color:var(${G[e.t.g][1]})">${e.t.n}</span>: ${e.note}. <span style="color:var(--muted)">${e.place}</span></span>`;b.addEventListener('click',()=>{setYear(e.y+0.05);});}
+  w.appendChild(b);
+  if(!e.h){const c=CIT[e.t.n]||{},r=c.r&&c.r[e.y],u=r?r.replace('~',ARK):c.p;if(u){const a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';a.className='cite'+(r?' rec':'');a.textContent=r?'record':(/familysearch/.test(u)?'tree':'page');a.setAttribute('aria-label',(r?'Record for ':'Page for ')+e.t.n+', '+e.y);w.appendChild(a);}}
+  e.el=w;log.appendChild(w);});
+
+// chips
+const chips=document.getElementById('chips');
+Object.entries(G).forEach(([k,[name,c,desc]])=>{const l=document.createElement('label');l.className='chip';l.innerHTML=`<input type="checkbox" id="g-${k}" checked><span class="sw" style="background:var(${c})"></span><span><span class="cn">${name}</span>${desc?`<span class="cd">${desc}</span>`:''}</span>`;l.querySelector('input').addEventListener('change',ev=>{ev.target.checked?hidden.delete(k):hidden.add(k);draw(Y,true);});chips.appendChild(l);});
+
+let Y=Y1, playing=false, speed=3, vb=[0,0,W,H], last=performance.now();
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const yearBig=document.getElementById('yearBig'), cap=document.getElementById('caption'), scrub=document.getElementById('scrub'), playBtn=document.getElementById('play');
+
+function posAt(t,y){const s=t.s; let i=0; while(i<s.length-1 && s[i+1][0]<=y) i++;
+  if(i<s.length-1){const ny=s[i+1][0], dur=Math.min(4,ny-s[i][0]), t0=ny-dur; const f=y>=t0?(y-t0)/dur:0; return {i,f};} return {i:s.length-1,f:0};}
+function partial(pts,f){const n=Math.max(1,Math.round(f*(pts.length-1)));return pts.slice(0,n+1);}
+let lastActive=null;
+function draw(y,snap,now){
+  const active=[]; const k=vb[2]/W;
+  T.forEach(t=>{
+    const vis=!hidden.has(t.g) && y>=t.start;
+    if(!vis){t.segEls.forEach(e=>e.attr('d',null));t.dot.attr('r',0);t.lab.attr('opacity',0);return;}
+    const {i,f}=posAt(t,y); const alive=y<=t.end+0.5;
+    t.segEls.forEach((e,j)=>{ if(j<i) e.attr('d',lineFn(t.segs[j].pts)); else if(j===i && f>0) e.attr('d',lineFn(partial(t.segs[j].pts,f))); else e.attr('d',null); e.attr('stroke-opacity',alive?.95:.28); });
+    const p=(i<t.segs.length && f>0) ? t.segs[i].pts[Math.round(f*(t.segs[i].pts.length-1))] : t.pts[i];
+    if(alive){t.dot.attr('cx',p[0]).attr('cy',p[1]).attr('r',3.6*k);active.push(p);} else t.dot.attr('r',0);
+    const recent=t.s.some(s=>y>=s[0]-0.2 && y<s[0]+2.2) || (f>0&&f<1);
+    t.lab.attr('x',p[0]+6*k).attr('y',p[1]-6*k).attr('font-size',11*k).attr('stroke-width',3*k).attr('opacity',alive&&recent?1:0);
+  });
+  let tgt=[0,0,W,H];
+  const fit=(pts,minW)=>{let x0=d3.min(pts,p=>p[0]),x1=d3.max(pts,p=>p[0]),y0=d3.min(pts,p=>p[1]),y1=d3.max(pts,p=>p[1]);
+    let w=Math.max(x1-x0+140,minW),h=Math.max(y1-y0+120,minW*H/W); if(w/h>W/H) h=w*H/W; else w=h*W/H; w=Math.min(w,W);h=Math.min(h,H);
+    const cx=(x0+x1)/2, cy=(y0+y1)/2; return [Math.max(0,Math.min(W-w,cx-w/2)),Math.max(0,Math.min(H-h,cy-h/2)),w,h];};
+  if(activeHL){ tgt=fit([activeHL.pt],300); }
+  else if(active.length && y<Y1-1){ tgt=fit(active,220); }
+  const a=(snap||reduce)?1:0.03;
+  vb=vb.map((v,j)=>v+(tgt[j]-v)*a);
+  svg.attr('viewBox',vb.join(' '));
+  if(activeHL){const ph=((now||0)%1600)/1600; ring.attr('cx',activeHL.pt[0]).attr('cy',activeHL.pt[1]).attr('r',(6+18*ph)*k).attr('opacity',1-ph); ring2.attr('cx',activeHL.pt[0]).attr('cy',activeHL.pt[1]).attr('r',4*k).attr('opacity',.9);}
+  yearBig.textContent=Math.floor(y);
+  let cur=null; for(const e of EV){ if(e.h||hidden.has(e.t.g)) continue; if(e.y<=y && e.y>y-2.5) cur=e; }
+  if(y<Y1-1){ if(cur){cap.hidden=false;cap.innerHTML=`<b>${cur.y}</b><span style="color:var(${G[cur.t.g][1]});font-weight:600">${cur.t.n}</span>: ${cur.note}. <span style="color:var(--muted)">${cur.place}</span>`;} else cap.hidden=true; }
+  let lastOn=null; EV.forEach(e=>{const on=e.h?(activeHL===e.h):(!hidden.has(e.t.g)&&e.y<=y&&e.y>y-2.5); e.el.classList.toggle('on',on); if(!e.h){e.el.style.borderLeftColor=on?`var(${G[e.t.g][1]})`:'transparent'; e.el.hidden=hidden.has(e.t.g);} if(on) lastOn=e;});
+  if(lastOn && lastOn!==lastActive && (playing||activeHL)){ log.scrollTop=Math.max(0,lastOn.el.offsetTop-log.offsetTop-log.clientHeight/2); lastActive=lastOn; }
+}
+function setYear(y){Y=Math.max(Y0,Math.min(Y1,y));scrub.value=Y;draw(Y,false,performance.now());}
+scrub.addEventListener('input',()=>{pending.length=0; if(activeHL){activeHL=null;card.hidden=true;ring.attr('opacity',0);ring2.attr('opacity',0);} Y=+scrub.value;draw(Y,false,performance.now());});
+document.getElementById('speed').addEventListener('change',e=>speed=+e.target.value);
+playBtn.addEventListener('click',()=>{ if(activeHL){hideHL(); if(!playing){playing=true;playBtn.textContent='Pause';last=performance.now();} return;}
+  if(!playing){ if(Y>=Y1-0.5){Y=Y0;vb=[0,0,W,H];pending.length=0;} playing=true; playBtn.textContent='Pause'; last=performance.now(); } else {playing=false; playBtn.textContent='Play';} });
+function tick(now){const dt=Math.min(.1,(now-last)/1000);last=now;
+  if(playing){const prev=Y; let sp=speed; if(pauseBox.checked&&now<cooldownUntil){const nx=HL.find(h=>h.y>Y+1e-6); if(nx) sp=Math.min(speed,(nx.y-Y)/Math.max(.05,(cooldownUntil-now)/1000));} Y+=dt*sp;
+    if(pauseBox.checked){HL.forEach(h=>{if(prev<h.y&&Y>=h.y&&!pending.includes(h)) pending.push(h);});
+      if(pending.length&&now<cooldownUntil) Y=Math.min(Y,pending[0].y);
+      if(pending.length&&now>=cooldownUntil){const h=pending.shift(); Y=h.y; playing=false; playBtn.textContent='Continue'; showHL(h,true);}}
+    if(Y>=Y1){Y=Y1;playing=false;playBtn.textContent='Play again';}
+    scrub.value=Y;}
+  draw(Y,false,now); requestAnimationFrame(tick);}
+Promise.all([fetch('countries-110m.json').then(r=>r.json()),fetch('states-10m.json').then(r=>r.json())]).then(([w,u])=>{
+  landG.append('path').attr('d',path(topojson.feature(w,w.objects.countries))).attr('fill','var(--land)').attr('stroke','var(--border)').attr('stroke-width',.6).attr('vector-effect','non-scaling-stroke');
+  stateG.append('path').attr('d',path(topojson.mesh(u,u.objects.states,(a,b)=>a!==b))).attr('fill','none').attr('stroke','var(--border)').attr('stroke-opacity',.55).attr('stroke-width',.4).attr('vector-effect','non-scaling-stroke');
+}).catch(()=>{cap.hidden=false;cap.textContent='The map outlines could not load. The journeys still play over a blank ocean.';});
+draw(Y,true,0); cap.hidden=false; cap.textContent='Press Play to watch the family move across four centuries. Each line is a journey and each dot a living person. The ★ stories pause the map as they come up.';
+requestAnimationFrame(tick);
+</script>
+
+</body>
+</html>
