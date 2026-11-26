@@ -26,6 +26,11 @@ header,section{display:flex;flex-direction:column;gap:.8rem}.lede{font-size:1.1r
 .yes{color:var(--yes)}.likely{color:var(--likely)}.open{color:var(--open)}.not{color:var(--not)}.no{color:var(--no)}
 .b{display:flex;flex-direction:column;gap:.3rem;min-width:0}.s{font-size:.85rem;display:flex;flex-wrap:wrap;gap:.1rem .9rem}
 footer{font-size:.88rem;color:var(--muted)}
+.feature{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);background:#1c140d;color:#f3e9d4;border-radius:6px;overflow:hidden;text-decoration:none;border:1px solid #3a2c1f}
+.feature:hover{border-color:#e8c987}.feature img{width:100%;height:100%;object-fit:cover;display:block;min-height:13rem}
+.feature div{padding:1.4rem 1.5rem;display:flex;flex-direction:column;gap:.5rem;justify-content:center}
+.feature small{letter-spacing:.14em;text-transform:uppercase;font-size:.75rem;color:#c8b797}.feature h2{font-size:clamp(1.6rem,3.5vw,2.2rem);color:#e8c987}.feature span{color:#e5d8bd}.feature b{color:#e8c987;font-weight:600}
+@media (max-width:640px){.feature{grid-template-columns:1fr}.feature img{min-height:0;aspect-ratio:16/9}}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1rem}
 .cards a{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1.1rem 1.15rem;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:.35rem}
 .cards a:hover{border-color:var(--link)}.cards a span{font-size:.95rem;color:var(--muted)}
@@ -35,10 +40,11 @@ nav.fam a{color:inherit;opacity:.75;text-underline-offset:3px}nav.fam a[aria-cur
 </style>
 </head>
 <body>
-<nav class="fam" aria-label="Family history pages"><a href="index.html" aria-current="page">Start</a><a href="henderson.html">Henderson map</a><a href="snouse-ashmead.html">Snouse &amp; Ashmead map</a><a href="languages.html">Languages</a><a href="lore.html">Lore vs. records</a><a href="europe.html">Europe</a><a href="school.html">School &amp; work</a></nav>
+<nav class="fam" aria-label="Family history pages"><a href="index.html" aria-current="page">Start</a><a href="film.html">The film</a><a href="henderson.html">Henderson map</a><a href="snouse-ashmead.html">Snouse &amp; Ashmead map</a><a href="languages.html">Languages</a><a href="lore.html">Lore vs. records</a><a href="europe.html">Europe</a><a href="school.html">School &amp; work</a></nav>
 
 <main>
 <header><h1>Where the family came from</h1><p class="lede">Two animated maps, four centuries, and more than 300 links to the records behind them.</p></header>
+<a class="feature" href="film.html"><img src="img/film/h1883-0.jpg" alt="Emigrants waiting on a Copenhagen quay in 1890, from a painting by Edvard Petersen" width="1500" height="929"><div><small>New · a film in two reels</small><h2>The Long Way Here</h2><span>The two family lines as a moving map, from the Mayflower to NASA. Each scene stops on a picture or a document from the time, including pages from old county histories that name the family.</span><b>Watch it →</b></div></a>
 <div class="cards">
 <a href="henderson.html"><h2>Henderson map</h2><span>Virginia to Georgia to Texas, with the Mayflower, Scots-Irish and Danish branches. 1610–2000.</span></a>
 <a href="snouse-ashmead.html"><h2>Snouse &amp; Ashmead map</h2><span>Dutch New York, Quaker Pennsylvania, Germany, Ayrshire and Iowa. 1610–2020.</span></a>

@@ -26,6 +26,11 @@ header,section{display:flex;flex-direction:column;gap:.8rem}.lede{font-size:1.1r
 .yes{color:var(--yes)}.likely{color:var(--likely)}.open{color:var(--open)}.not{color:var(--not)}.no{color:var(--no)}
 .b{display:flex;flex-direction:column;gap:.3rem;min-width:0}.s{font-size:.85rem;display:flex;flex-wrap:wrap;gap:.1rem .9rem}
 footer{font-size:.88rem;color:var(--muted)}
+.feature{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);background:#1c140d;color:#f3e9d4;border-radius:6px;overflow:hidden;text-decoration:none;border:1px solid #3a2c1f}
+.feature:hover{border-color:#e8c987}.feature img{width:100%;height:100%;object-fit:cover;display:block;min-height:13rem}
+.feature div{padding:1.4rem 1.5rem;display:flex;flex-direction:column;gap:.5rem;justify-content:center}
+.feature small{letter-spacing:.14em;text-transform:uppercase;font-size:.75rem;color:#c8b797}.feature h2{font-size:clamp(1.6rem,3.5vw,2.2rem);color:#e8c987}.feature span{color:#e5d8bd}.feature b{color:#e8c987;font-weight:600}
+@media (max-width:640px){.feature{grid-template-columns:1fr}.feature img{min-height:0;aspect-ratio:16/9}}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1rem}
 .cards a{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:1.1rem 1.15rem;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:.35rem}
 .cards a:hover{border-color:var(--link)}.cards a span{font-size:.95rem;color:var(--muted)}
@@ -38,7 +43,7 @@ nav.fam a{color:inherit;opacity:.75;text-underline-offset:3px}nav.fam a[aria-cur
 </style>
 </head>
 <body>
-<nav class="fam" aria-label="Family history pages"><a href="index.html">Start</a><a href="henderson.html">Henderson map</a><a href="snouse-ashmead.html">Snouse &amp; Ashmead map</a><a href="languages.html">Languages</a><a href="lore.html">Lore vs. records</a><a href="europe.html">Europe</a><a href="school.html" aria-current="page">School &amp; work</a></nav>
+<nav class="fam" aria-label="Family history pages"><a href="index.html">Start</a><a href="film.html">The film</a><a href="henderson.html">Henderson map</a><a href="snouse-ashmead.html">Snouse &amp; Ashmead map</a><a href="languages.html">Languages</a><a href="lore.html">Lore vs. records</a><a href="europe.html">Europe</a><a href="school.html" aria-current="page">School &amp; work</a></nav>
 
 <main>
 <header><h1>School and work</h1><p class="lede">Classrooms, colleges, farms, a tailor’s shop and a NASA laboratory, from printed biographies, school reports and research papers.</p></header>
@@ -49,7 +54,7 @@ nav.fam a{color:inherit;opacity:.75;text-underline-offset:3px}nav.fam a[aria-cur
 <section><h2>Was there a Herbert Hoover connection?</h2><p>Family memory suggests Thomas’s going to Stanford had something to do with Hoover. <strong>No connection has turned up.</strong> That isn’t the same as there being none.</p>
 <ul class="plain">
 <li><strong>Not by blood, as far as the tree shows.</strong> About 8,900 ancestors on both sides were compared with 2,001 of Hoover’s and 1,656 of Lou Henry Hoover’s. Nobody is shared later than about 1549. The few shared names before that (a Welsh couple, a Swiss Huber, some English gentry) rest on unsourced trees.</li>
-<li><strong>“Huber” is a coincidence so far.</strong> Hoover’s name was Huber, and Christina Snouse was a Huber. But his Hubers came from the Palatinate and hers from Württemberg, and no link between them is known. (<a href="https://www.wikitree.com/wiki/Huber-1085" target="_blank" rel="noopener">Hoover’s immigrant ancestor</a>; <a href="https://www.familysearch.org/ark:/61903/1:1:MCGX-ZW9" target="_blank" rel="noopener">Christina, 1860</a>.)</li>
+<li><strong>“Huber” is a coincidence so far, though the family did write “Hoover”.</strong> Hoover’s name was Huber, and Christina Snouse was a Huber. An <a href="https://archive.org/details/historyofchickas00alex?q=Snouse" target="_blank" rel="noopener">1883 Iowa county history</a> even calls her “Christena C. Hoover”, which may be where the memory of a Hoover connection began. But his Hubers came from the Palatinate and hers from Württemberg, and no link between them is known. (<a href="https://www.wikitree.com/wiki/Huber-1085" target="_blank" rel="noopener">Hoover’s immigrant ancestor</a>; <a href="https://www.familysearch.org/ark:/61903/1:1:MCGX-ZW9" target="_blank" rel="noopener">Christina, 1860</a>.)</li>
 <li><strong>A marriage link can’t be ruled out.</strong> There are too many in-laws to check without a name. Hoover’s close families were Minthorn, Davis, Yount, Coate, Wasley, Toole and Sherwood. If any of those rings a bell, it can be tested quickly.</li>
 <li><strong>Other Iowa and Stanford threads.</strong> Harry Snouse and Hoover were both born in Iowa in 1874. Stanford’s first president, David Starr Jordan, taught at Lombard in Galesburg in the early 1870s, and Helen Snouse graduated from Lombard. A “J. W. Hoover” worked on the same 1918 Galesburg bond drive as Harry. None of these is evidence of anything yet. (<a href="https://en.wikipedia.org/wiki/David_Starr_Jordan" target="_blank" rel="noopener">Jordan</a>; <a href="https://www.familysearch.org/ark:/61903/3:1:3Q9M-CSZK-5FQ" target="_blank" rel="noopener">1918 list</a>.)</li>
 </ul>
